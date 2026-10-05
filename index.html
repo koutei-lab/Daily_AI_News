@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily AI & Workspace Knowledge - 毎日3つのAI知識</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            },
+            workspace: {
+              docs: '#4285f4',
+              sheets: '#0f9d58',
+              slides: '#f4b400',
+              gemini: '#8e44ad'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans JP', 'Inter', sans-serif;
+      transition: background-color 0.3s ease;
+    }
+
+    /* 記事コンテンツ（カード本文）の可変フォントサイズ制御 */
+    .content-size-sm .card-title { font-size: 0.95rem; }
+    .content-size-sm .card-body { font-size: 0.8125rem; }
+    .content-size-sm .card-prompt { font-size: 0.75rem; }
+
+    .content-size-base .card-title { font-size: 1.05rem; }
+    .content-size-base .card-body { font-size: 0.875rem; }
+    .content-size-base .card-prompt { font-size: 0.8125rem; }
+
+    .content-size-lg .card-title { font-size: 1.2rem; }
+    .content-size-lg .card-body { font-size: 1.025rem; line-height: 1.75; }
+    .content-size-lg .card-prompt { font-size: 0.925rem; line-height: 1.6; }
+
+    .content-size-xl .card-title { font-size: 1.35rem; }
+    .content-size-xl .card-body { font-size: 1.15rem; line-height: 1.85; }
+    .content-size-xl .card-prompt { font-size: 1.05rem; line-height: 1.7; }
+
+    /* スムーズスクロールとカスタムスクロールバー */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.3);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.5);
+    }
+    .card-hover-effect {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-hover-effect:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-blue-100 selection:text-blue-900">
+
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs transition-colors">
+    <div class="max-w-4xl mx-auto px-3.5 py-2.5 flex items-center justify-between gap-2">
+      <!-- アプリロゴ & タイトル -->
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shrink-0 shadow-xs">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C12 7.5 7.5 12 2 12C7.5 12 12 16.5 12 22C12 16.5 16.5 12 22 12C16.5 12 12 7.5 12 2Z" fill="white"/>
+            <circle cx="19" cy="5" r="2" fill="#93C5FD"/>
+          </svg>
+        </div>
+
+        <div class="min-w-0">
+          <div class="flex items-center gap-1.5 leading-none">
+            <h1 class="font-bold text-slate-900 tracking-tight text-sm sm:text-base truncate">AI & Workspace</h1>
+            <span class="text-[10px] px-1 py-0.5 rounded-full bg-blue-100 text-blue-700 font-semibold shrink-0">Daily</span>
+          </div>
+          <p class="text-[11px] text-slate-400 font-medium truncate mt-0.5" id="headerDateText">読み込み中...</p>
+        </div>
+      </div>
+
+      <!-- クイック操作（文字サイズボタン & 設定モーダル起動） -->
+      <div class="flex items-center gap-1.5 shrink-0">
+        <!-- 文字サイズクイックセレクター（固定コンパクト幅で崩れ防止） -->
+        <div class="flex items-center bg-slate-100/90 p-0.5 rounded-xl border border-slate-200/80">
+          <button id="btnFontDec" title="文字を小さく" class="p-1.5 rounded-lg hover:bg-white text-slate-600 hover:text-slate-900 active:scale-95 transition">
+            <span class="text-[11px] font-bold px-0.5">A-</span>
+          </button>
+          <span id="currentFontSizeBadge" class="text-[11px] w-10 text-center font-bold text-slate-700 select-none">標準</span>
+          <button id="btnFontInc" title="文字を大きく" class="p-1.5 rounded-lg hover:bg-white text-slate-600 hover:text-slate-900 active:scale-95 transition">
+            <span class="text-[11px] font-bold px-0.5">A+</span>
+          </button>
+        </div>
+
+        <!-- 設定ボタン -->
+        <button id="btnOpenSettings" class="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 active:scale-95 shadow-xs text-slate-700 transition flex items-center justify-center shrink-0" aria-label="設定">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-4xl w-full mx-auto px-3.5 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
+
+    <!-- 配信時間インフォ & 継続ストリークバナー（折り返しに強いグリッド・フレックス構造） -->
+    <div class="bg-gradient-to-r from-blue-50/90 via-indigo-50/50 to-slate-50 text-slate-800 rounded-2xl p-4 sm:p-5 border border-blue-100/80 shadow-xs">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="space-y-1.5 min-w-0">
+          <!-- 上段: タイトルと配信時間・進捗状況 -->
+          <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <h2 class="text-base sm:text-lg font-bold tracking-tight text-slate-900">
+              今日の3つの知識
+            </h2>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-blue-100/90 text-blue-700 border border-blue-200 shrink-0">
+              <i data-lucide="clock" class="w-3 h-3 mr-1 inline"></i>
+              <span id="deliveryTimeDisplay" class="font-bold">08:00</span>
+            </span>
+            <span id="todayProgressBadge" class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0">
+              未完了 (0 / 3)
+            </span>
+          </div>
+          <!-- 下段テキスト -->
+          <p class="text-xs text-slate-500 leading-snug">
+            日替わりで1日3分、AIとWorkspaceの時短スキルを習得
+          </p>
+        </div>
+
+        <!-- 小さく目立たない連続学習ストリークバッジ（自動左揃え/右揃え） -->
+        <div class="self-start sm:self-center inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200/90 text-xs text-slate-600 shadow-xs shrink-0">
+          <span class="text-amber-500 text-sm leading-none">🔥</span>
+          <span class="text-[11px] text-slate-400">連続</span>
+          <span id="streakCount" class="font-bold text-amber-600">1</span>
+          <span class="text-[11px] text-slate-400">日目</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-between gap-2.5 pt-0.5">
+      <div class="flex items-center gap-2" role="tablist">
+        <button id="tabToday" class="px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold bg-blue-600 text-white shadow-xs flex items-center gap-1.5 transition">
+          <i data-lucide="sun" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+          <span>今日の3つ</span>
+        </button>
+        <button id="tabArchive" class="px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-xs flex items-center gap-1.5 transition">
+          <i data-lucide="library" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+          <span>過去のライブラリ</span>
+        </button>
+      </div>
+
+      <!-- アクションボタン -->
+      <div class="flex items-center gap-2">
+        <button id="btnGeminiGenerate" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 flex items-center gap-1.5 transition active:scale-95 shadow-xs" title="Gemini AIで別のテーマを今すぐ生成">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-600"></i>
+          <span>AIで再生成</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- コンテンツカードコンテナ -->
+    <div id="cardsContainer" class="space-y-4">
+      <!-- 動的にJavaScriptから3つの知識カードを描画します -->
+      <div class="p-8 text-center bg-white rounded-2xl border border-slate-200 shadow-sm">
+        <div class="inline-block animate-spin text-blue-600 mb-2">
+          <i data-lucide="loader-2" class="w-8 h-8"></i>
+        </div>
+        <p class="text-slate-500 font-medium text-xs sm:text-sm">知識カードを読み込んでいます...</p>
+      </div>
+    </div>
+
+    <div id="allCompleteBanner" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-5 text-center shadow-sm">
+      <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-500 text-white rounded-full text-2xl mb-2 shadow-md">
+        🎉
+      </div>
+      <h3 class="text-lg font-bold text-emerald-900">本日の3つの知識をすべて達成しました！</h3>
+      <p class="text-sm text-emerald-700 mt-1 max-w-md mx-auto">
+        素晴らしい学習継続力です！明日も指定の時間（<span class="deliveryTimeEcho font-semibold">08:00</span>）に新しい3つの知識をお届けします。
+      </p>
+    </div>
+
+  </main>
+
+  <div id="settingsModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 transform transition-all animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- モーダルヘッダー -->
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2.5">
+          <div class="p-2 rounded-xl bg-blue-50 text-blue-600">
+            <i data-lucide="sliders" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">配信＆表示設定</h3>
+        </div>
+        <button id="btnCloseSettings" class="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- モーダル本体 -->
+      <div class="py-5 space-y-6">
+
+        <!-- 1. 配信時間（はいしんじかん）の設定 -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <label for="inputDeliveryTime" class="font-bold text-slate-800 flex items-center gap-2 text-sm md:text-base">
+              <i data-lucide="bell-ring" class="w-4 h-4 text-blue-600"></i>
+              <span>毎日の配信リマインダー時間</span>
+            </label>
+            <span class="text-xs px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold">毎日通知</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            毎朝または学習したい時間に新しい3つの知識を確認するための目安時間です。
+          </p>
+          <div class="flex items-center gap-3 pt-1">
+            <input type="time" id="inputDeliveryTime" value="08:00" class="px-4 py-2.5 rounded-xl border border-slate-300 font-semibold text-slate-800 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-base">
+            <button id="btnTestNotification" class="px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5">
+              <i data-lucide="bell" class="w-3.5 h-3.5"></i>
+              <span>通知テスト</span>
+            </button>
+          </div>
+        </div>
+
+        <hr class="border-slate-100">
+
+        <!-- 2. もじのおおきさ（文字サイズ）の設定 -->
+        <div class="space-y-3">
+          <label class="font-bold text-slate-800 flex items-center gap-2 text-sm md:text-base">
+            <i data-lucide="type" class="w-4 h-4 text-indigo-600"></i>
+            <span>もじのおおきさ（文字サイズ）</span>
+          </label>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            読みやすいお好みの文字の大きさを選んでください。画面全体の文字が連動して変化します。
+          </p>
+
+          <!-- 4段階の文字サイズ選択肢 -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1" id="fontSizeOptionGrid">
+            <button data-size="sm" class="font-size-btn p-3 rounded-2xl border text-center transition flex flex-col items-center justify-center gap-1">
+              <span class="text-xs font-semibold text-slate-600">小さめ</span>
+              <span class="text-xs font-bold text-slate-900">14px</span>
+            </button>
+            <button data-size="base" class="font-size-btn p-3 rounded-2xl border text-center transition flex flex-col items-center justify-center gap-1">
+              <span class="text-xs font-semibold text-slate-600">標準</span>
+              <span class="text-sm font-bold text-slate-900">16px</span>
+            </button>
+            <button data-size="lg" class="font-size-btn p-3 rounded-2xl border text-center transition flex flex-col items-center justify-center gap-1">
+              <span class="text-xs font-semibold text-slate-600">大きめ</span>
+              <span class="text-base font-bold text-slate-900">18px</span>
+            </button>
+            <button data-size="xl" class="font-size-btn p-3 rounded-2xl border text-center transition flex flex-col items-center justify-center gap-1">
+              <span class="text-xs font-semibold text-slate-600">特大</span>
+              <span class="text-lg font-bold text-slate-900">20px</span>
+            </button>
+          </div>
+
+          <!-- プレビュー表示用ボックス -->
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 mt-2">
+            <span class="text-xs text-slate-400 font-semibold block mb-1">文字サイズプレビュー:</span>
+            <p class="text-slate-800 font-medium leading-relaxed">
+              「GeminiとGoogle Workspaceを活用して日々の仕事を劇的にスマートに！」
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- モーダルフッター -->
+      <div class="flex items-center justify-end gap-2 pt-4 border-t border-slate-100">
+        <button id="btnSaveSettings" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/20 active:scale-95 transition">
+          設定を保存する
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="aiDetailModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col p-6 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <div class="p-2 rounded-xl bg-purple-100 text-purple-700">
+            <i data-lucide="bot" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900" id="aiModalTitle">AI解説</h3>
+            <span class="text-xs text-slate-500" id="aiModalCategory">AI深掘り</span>
+          </div>
+        </div>
+        <button id="btnCloseAiModal" class="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="aiModalContent" class="py-4 overflow-y-auto space-y-4 text-slate-700 leading-relaxed flex-1">
+        <!-- AIレスポンスがここに入ります -->
+      </div>
+      <div class="pt-3 border-t border-slate-100 flex justify-end">
+        <button id="btnCloseAiModalBtn" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition">
+          閉じる
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 max-w-sm">
+    <i data-lucide="check-circle" id="toastIcon" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+    <span id="toastMessage" class="text-xs sm:text-sm font-medium">通知メッセージ</span>
+  </div>
+
+  <script>
+    // 豊富な知識マスターデータ（AI全般、Gemini、Google Workspace）
+    const KNOWLEDGE_BANK = [
+      // --- カテゴリ1: AI全般 ---
+      {
+        id: "ai_1",
+        category: "AI全般",
+        categoryColor: "bg-blue-100 text-blue-800 border-blue-200",
+        icon: "cpu",
+        title: "ハルシネーション（幻覚）を防ぐ3つの黄金ルール",
+        summary: "LLMは自信満々に誤った情報を出力することがあります。根拠となる参考文をプロンプト内に貼る「グラウンディング」、不明時は「わかりません」と答える指示、出力形式の厳格指定で精度を劇的に向上できます。",
+        practicalPrompt: "「以下の参考テキスト【...】のみに基づいて質問に回答してください。テキストに書かれていない事実は推測せず『資料に記載がありません』と答えてください。」",
+        actionItem: "プロンプトに必ず『参考資料』の枠組みを設けて試す",
+        tags: ["プロンプト技法", "LLM基礎"]
+      },
+      {
+        id: "ai_2",
+        category: "AI全般",
+        categoryColor: "bg-blue-100 text-blue-800 border-blue-200",
+        icon: "network",
+        title: "Few-Shotプロンプティングで出力を完全にコントロール",
+        summary: "やりたい指示を言葉で長々と説明するよりも、「入力例」と「期待する出力例」を2〜3組（Shot）見せる方がAIは圧倒的に意図を正確に理解します。表記揺れの統一やデータ抽出に最適です。",
+        practicalPrompt: "入力例1: 鈴木 2026/04/01 東京 -> 出力例1: [SUZUKI-TYO-0401]\n入力例2: 佐藤 2026/05/10 大阪 -> 出力例2: [SATO-OSA-0510]\n入力: 田中 2026/06/15 名古屋 -> 出力:",
+        actionItem: "複雑なフォーマット変換を例示でAIにやらせてみる",
+        tags: ["プロンプト技法", "効率化"]
+      },
+      {
+        id: "ai_3",
+        category: "AI全般",
+        categoryColor: "bg-blue-100 text-blue-800 border-blue-200",
+        icon: "git-branch",
+        title: "思考の連鎖（Chain-of-Thought: CoT）の威力",
+        summary: "数学的推論や多角的なビジネス判断をAIに頼むときは、「ステップ・バイ・ステップで順を追って考えてください」と添えるだけで、内部で論理の整理が行われ、正答率が急上昇します。",
+        practicalPrompt: "「このプロジェクトの潜在的リスクを特定してください。結論を急がず、1. 現状分析 2. 障害予測 3. 対策案 のステップ順に思考プロセスを明記して検討してください。」",
+        actionItem: "複雑なタスクで『順を追って考えて』と指示を足してみる",
+        tags: ["推論", "プロンプト技法"]
+      },
+      {
+        id: "ai_4",
+        category: "AI全般",
+        categoryColor: "bg-blue-100 text-blue-800 border-blue-200",
+        icon: "eye",
+        title: "マルチモーダルAI活用の勘所：画像＋指示文",
+        summary: "現代のAIは文字だけでなく図表やホワイトボードの落書き、UIデザインのスクリーンショットを直接理解できます。手書きメモのテキストデータ化や、エラー画面スクショからの原因分析に威力を発揮します。",
+        practicalPrompt: "（エラー画面の画像を添付して）「この画面に出ているエラーコードと原因、および最初にとるべき対処手順を初心者向けに箇条書きで示してください。」",
+        actionItem: "スマホで撮った手書き議事録をAIに清書させてみる",
+        tags: ["マルチモーダル", "画像認識"]
+      },
+
+      // --- カテゴリ2: Gemini ---
+      {
+        id: "gemini_1",
+        category: "Gemini",
+        categoryColor: "bg-purple-100 text-purple-800 border-purple-200",
+        icon: "sparkles",
+        title: "Geminiの巨大コンテキストウィンドウ（長文処理）の真価",
+        summary: "Geminiの最大の特徴は100万〜200万トークン規模の圧倒的な長文読解能力です。1時間の会議録音文字起こし、数百ページの決算資料や分厚い社内マニュアルを一括で丸ごと読み込ませて横断検索できます。",
+        practicalPrompt: "「添付した社内規定PDF全体をスキャンし、『慶弔休暇』に関する申請期限・必要書類・承認フローを該当ページ番号とともに整理してください。」",
+        actionItem: "長大な契約書やマニュアルの該当箇所探しを任せる",
+        tags: ["Gemini特長", "資料分析"]
+      },
+      {
+        id: "gemini_2",
+        category: "Gemini",
+        categoryColor: "bg-purple-100 text-purple-800 border-purple-200",
+        icon: "search",
+        title: "Google検索グラウンディングで最新情報を正確に補足",
+        summary: "GeminiはGoogle検索の最新インデックスと直結しています。「最新の〜」「現在発表されている〜」といった検索連動を指示することで、学習カットオフ以降のニュースや競合製品の最新リリース情報を引用付きで取得可能です。",
+        practicalPrompt: "「2026年最新のクラウドセキュリティ動向について、Google検索で信頼性の高い一次情報を参照し、主要な3つの変化を要約してください。」",
+        actionItem: "最新トレンドの調査にGeminiを活用する",
+        tags: ["リアルタイム検索", "情報収集"]
+      },
+      {
+        id: "gemini_3",
+        category: "Gemini",
+        categoryColor: "bg-purple-100 text-purple-800 border-purple-200",
+        icon: "code",
+        title: "Geminiによるコード生成・Google Apps Script (GAS) 自動化",
+        summary: "GeminiはPythonやJavaScript、特にGoogle Apps Scriptのコード生成が得意です。「スプレッドシートの特定列を検知してメールを自動送信するスクリプト」などを日本語で頼めば数秒で実装コードを出力してくれます。",
+        practicalPrompt: "「Googleスプレッドシートのシート名『進捗』のE列が『完了』になった行を自動的に別シート『アーカイブ』へ移動させるGASコードを、詳細なコメント付きで作成してください。」",
+        actionItem: "日常のWorkspace繰り返し作業をGASコード化してもらう",
+        tags: ["GAS", "コーディング"]
+      },
+
+      // --- カテゴリ3: Google Workspace ---
+      {
+        id: "ws_1",
+        category: "Google Workspace",
+        categoryColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
+        icon: "sheet",
+        title: "スプレッドシート×AI：関数作成とデータのスマート抽出",
+        summary: "複雑なINDEX/MATCHやREGEXEXTRACTに悩む必要はありません。「A列のメールアドレスからドメイン部分だけを抜き出して重複除外する計算式」を自然言語でAIに作らせることで作業が何倍も速くなります。",
+        practicalPrompt: "「スプレッドシートのB列にある『東京都新宿区西新宿2-8-1』のような住所文字列から、都道府県と市区町村を分離する数式を教えてください。」",
+        actionItem: "手作業で切り貼りしているスプレッドシート処理を数式化する",
+        tags: ["スプレッドシート", "時短術"]
+      },
+      {
+        id: "ws_2",
+        category: "Google Workspace",
+        categoryColor: "bg-blue-100 text-blue-900 border-blue-200",
+        icon: "mail",
+        title: "Gmail×AI：トーン調整と超速ドラフト返信術",
+        summary: "Gmail内のGemini「Help me write（執筆サポート）」やプロンプト活用により、箇条書きの荒いメモを失礼のない敬語ビジネスメールへ即時整形できます。「納期を延期したいが角を立てたくない」などトーン指定が鍵です。",
+        practicalPrompt: "「以下の要件で取引先の山田部長宛てに、納期を3日延長してほしい旨のお詫びと相談のメール文面を作ってください。【要件: 現行納期10日、追加検証が必要、変更後納期13日】」",
+        actionItem: "言いにくい依頼メールの丁寧な下書きをAIに作らせる",
+        tags: ["Gmail", "ビジネスメール"]
+      },
+      {
+        id: "ws_3",
+        category: "Google Workspace",
+        categoryColor: "bg-amber-100 text-amber-900 border-amber-200",
+        icon: "presentation",
+        title: "Googleスライド構成案を5分で完成させる階層プロンプト",
+        summary: "スライド作成で一番時間がかかるのは「構成（スライドごとの見出し・キーメッセージ・箇条書き）」です。プレゼンの目的と聴衆を定義して10枚分のスライド骨子をAIに出力させれば、作成時間は半分以下になります。",
+        practicalPrompt: "「役員向けに『社内AIツール導入計画』を提案する10枚のスライド骨子を作成してください。各スライドごとに【スライド番号・タイトル・コアメッセージ・話す内容の箇条書き3点】を明確に記述してください。」",
+        actionItem: "企画書・スライドの骨子をまずAIに提案させる",
+        tags: ["Googleスライド", "プレゼン"]
+      },
+      {
+        id: "ws_4",
+        category: "Google Workspace",
+        categoryColor: "bg-sky-100 text-sky-800 border-sky-200",
+        icon: "file-text",
+        title: "Googleドキュメントでの議事録即時フォーマット術",
+        summary: "Google Meetなどの自動文字起こしデータをGoogleドキュメントに貼り、Geminiに「決定事項」「ToDo（担当・期日付き）」「次回のアジェンダ」に整頓させると、会議直後に完璧な議事録が配布できます。",
+        practicalPrompt: "「以下の会議の会話メモから、1. 決定した事項 2. 各人のToDoと期日 3. 保留となった検討課題 を綺麗にテーブルまたは箇条書きで抽出してください。【会話メモ...】」",
+        actionItem: "次回の会議メモをコピペして整形させてみる",
+        tags: ["Googleドキュメント", "議事録"]
+      }
+    ];
+
+    const APP_STATE = {
+      deliveryTime: "08:00",
+      fontSize: "base", // sm, base, lg, xl
+      streak: 1,
+      lastActiveDate: "",
+      completedIds: new Set(),
+      activeTab: "today", // 'today' or 'archive'
+      todayIndices: [0, 4, 7] // 今日の3つのインデックス (AI, Gemini, Workspace)
+    };
+
+    // ローカルストレージキー
+    const STORAGE_KEY = "daily_ai_workspace_state_v1";
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          APP_STATE.deliveryTime = parsed.deliveryTime || "08:00";
+          APP_STATE.fontSize = parsed.fontSize || "base";
+          APP_STATE.streak = parsed.streak || 1;
+          APP_STATE.lastActiveDate = parsed.lastActiveDate || "";
+          APP_STATE.completedIds = new Set(parsed.completedIds || []);
+        }
+      } catch (e) {
+        console.error("Failed to load local storage:", e);
+      }
+
+      // 今日の日付のチェックとストリーク計算
+      const todayStr = getTodayDateString();
+      if (!APP_STATE.lastActiveDate) {
+        APP_STATE.lastActiveDate = todayStr;
+      } else if (APP_STATE.lastActiveDate !== todayStr) {
+        const diffDays = getDaysDifference(APP_STATE.lastActiveDate, todayStr);
+        if (diffDays === 1) {
+          // 連続ログイン
+          APP_STATE.streak += 1;
+        } else if (diffDays > 1) {
+          // 途切れた場合はリセット
+          APP_STATE.streak = 1;
+        }
+        // 日付が変わったら完了フラグをリセット（新しい日）
+        APP_STATE.completedIds.clear();
+        APP_STATE.lastActiveDate = todayStr;
+      }
+
+      // 日付に基づく今日の3つの選出（AI全般、Gemini、Workspaceから1つずつ）
+      selectDailyThree();
+      applyFontSize(APP_STATE.fontSize);
+      saveState();
+    }
+
+    function saveState() {
+      try {
+        const payload = {
+          deliveryTime: APP_STATE.deliveryTime,
+          fontSize: APP_STATE.fontSize,
+          streak: APP_STATE.streak,
+          lastActiveDate: APP_STATE.lastActiveDate,
+          completedIds: Array.from(APP_STATE.completedIds)
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      } catch (e) {
+        console.error("Failed to save state:", e);
+      }
+    }
+
+    function getTodayDateString() {
+      const now = new Date();
+      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    }
+
+    function getDaysDifference(d1Str, d2Str) {
+      const date1 = new Date(d1Str);
+      const date2 = new Date(d2Str);
+      const diffTime = Math.abs(date2 - date1);
+      return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    }
+
+    // 日付ハッシュを利用して日替わりの3問をバランスよく選出
+    function selectDailyThree() {
+      const today = new Date();
+      const seed = today.getFullYear() * 1000 + (today.getMonth() + 1) * 31 + today.getDate();
+
+      const aiItems = KNOWLEDGE_BANK.filter(k => k.category === "AI全般");
+      const geminiItems = KNOWLEDGE_BANK.filter(k => k.category === "Gemini");
+      const wsItems = KNOWLEDGE_BANK.filter(k => k.category === "Google Workspace");
+
+      const item1 = aiItems[seed % aiItems.length];
+      const item2 = geminiItems[(seed + 1) % geminiItems.length];
+      const item3 = wsItems[(seed + 2) % wsItems.length];
+
+      APP_STATE.todayItems = [item1, item2, item3];
+    }
+
+    const FONT_SIZE_LABELS = {
+      sm: "小さめ",
+      base: "標準",
+      lg: "大きめ",
+      xl: "特大"
+    };
+
+    const FONT_SIZE_SEQUENCE = ["sm", "base", "lg", "xl"];
+
+    function applyFontSize(sizeKey) {
+      const mainContainer = document.getElementById("cardsContainer");
+      if (mainContainer) {
+        mainContainer.classList.remove("content-size-sm", "content-size-base", "content-size-lg", "content-size-xl");
+        mainContainer.classList.add(`content-size-${sizeKey}`);
+      }
+
+      APP_STATE.fontSize = sizeKey;
+      const badge = document.getElementById("currentFontSizeBadge");
+      if (badge) {
+        badge.textContent = FONT_SIZE_LABELS[sizeKey] || "標準";
+      }
+
+      // 設定モーダル内の選択ボタンスタイル更新
+      document.querySelectorAll(".font-size-btn").forEach(btn => {
+        const btnSize = btn.getAttribute("data-size");
+        if (btnSize === sizeKey) {
+          btn.classList.add("border-blue-600", "bg-blue-50/70", "ring-2", "ring-blue-500/20");
+          btn.classList.remove("border-slate-200", "bg-white");
+        } else {
+          btn.classList.remove("border-blue-600", "bg-blue-50/70", "ring-2", "ring-blue-500/20");
+          btn.classList.add("border-slate-200", "bg-white");
+        }
+      });
+
+      saveState();
+    }
+
+    function renderApp() {
+      // 日付テキスト
+      const dateText = document.getElementById("headerDateText");
+      const now = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
+      dateText.textContent = now.toLocaleDateString('ja-JP', options);
+
+      // 配信時間表示
+      document.getElementById("deliveryTimeDisplay").textContent = APP_STATE.deliveryTime;
+      document.querySelectorAll(".deliveryTimeEcho").forEach(el => {
+        el.textContent = APP_STATE.deliveryTime;
+      });
+
+      // 継続ストリーク
+      document.getElementById("streakCount").textContent = APP_STATE.streak;
+
+      // カード一覧の描画
+      const container = document.getElementById("cardsContainer");
+      container.className = `space-y-4 content-size-${APP_STATE.fontSize}`;
+      container.innerHTML = "";
+
+      const itemsToRender = (APP_STATE.activeTab === "today") 
+        ? APP_STATE.todayItems 
+        : KNOWLEDGE_BANK;
+
+      itemsToRender.forEach((item, index) => {
+        const isCompleted = APP_STATE.completedIds.has(item.id);
+        const card = document.createElement("div");
+        card.className = `card-hover-effect bg-white rounded-2xl p-4 sm:p-6 border transition-all ${
+          isCompleted 
+            ? "border-emerald-300 bg-emerald-50/20 shadow-xs" 
+            : "border-slate-200 shadow-xs hover:border-blue-200"
+        }`;
+
+        card.innerHTML = `
+          <div class="flex flex-col gap-3">
+            <div class="space-y-2.5">
+              <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${item.categoryColor}">
+                  ${item.category}
+                </span>
+                <span class="text-[11px] text-slate-400 font-medium flex items-center gap-1">
+                  <i data-lucide="book-open" class="w-3 h-3"></i> 知識 #${index + 1}
+                </span>
+                ${item.tags ? item.tags.map(t => `<span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">#${t}</span>`).join('') : ''}
+              </div>
+
+              <h3 class="card-title font-bold text-slate-900 leading-snug tracking-tight">
+                ${item.title}
+              </h3>
+
+              <p class="card-body text-slate-600 leading-relaxed">
+                ${item.summary}
+              </p>
+
+              <!-- 実践プロンプト / 活用例ボックス -->
+              <div class="bg-slate-50/90 border border-slate-200/90 rounded-xl p-3 sm:p-3.5 space-y-2 mt-2">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-bold text-slate-700 flex items-center gap-1.5 text-[11px] sm:text-xs">
+                    <i data-lucide="terminal" class="w-3.5 h-3.5 text-blue-600"></i>
+                    今日すぐ使えるプロンプト / コツ
+                  </span>
+                  <button onclick="copyPrompt('${encodeURIComponent(item.practicalPrompt)}')" class="text-blue-600 hover:text-blue-800 text-[11px] sm:text-xs font-semibold flex items-center gap-1 active:scale-95 transition">
+                    <i data-lucide="copy" class="w-3 h-3"></i> コピー
+                  </button>
+                </div>
+                <pre class="card-prompt bg-white p-2.5 rounded-lg border border-slate-200 font-mono text-slate-700 whitespace-pre-wrap break-words leading-relaxed">${escapeHtml(item.practicalPrompt)}</pre>
+                <div class="flex items-center gap-1.5 text-[11px] sm:text-xs text-slate-500 font-medium pt-0.5">
+                  <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i>
+                  <span><strong>アクション目標:</strong> ${item.actionItem}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 下部アクション: 完了トグル & AI深掘りボタン（スマホでも綺麗に横並び） -->
+            <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100 shrink-0">
+              <button onclick="toggleKnowledgeComplete('${item.id}')" class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition active:scale-95 ${
+                isCompleted 
+                  ? "bg-emerald-600 text-white shadow-xs hover:bg-emerald-700" 
+                  : "bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300"
+              }">
+                <i data-lucide="${isCompleted ? 'check-check' : 'circle'}" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                <span>${isCompleted ? '理解した！' : '完了にする'}</span>
+              </button>
+
+              <button onclick="askGeminiDeepDive('${item.id}')" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-purple-700 hover:bg-purple-50 flex items-center gap-1 transition">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-600"></i>
+                <span>Geminiで深掘り</span>
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      // アイコンの再初期化
+      lucide.createIcons();
+
+      // 進捗状況バッジと完了バナーの更新
+      updateProgressDisplay();
+    }
+
+    function updateProgressDisplay() {
+      const todayTotal = APP_STATE.todayItems.length;
+      let completedCount = 0;
+      APP_STATE.todayItems.forEach(item => {
+        if (APP_STATE.completedIds.has(item.id)) completedCount++;
+      });
+
+      const badge = document.getElementById("todayProgressBadge");
+      const banner = document.getElementById("allCompleteBanner");
+
+      if (completedCount === todayTotal) {
+        badge.className = "inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-emerald-600 text-white";
+        badge.textContent = `本日分完了！ (${completedCount} / ${todayTotal})`;
+        if (APP_STATE.activeTab === "today") {
+          banner.classList.remove("hidden");
+        }
+      } else {
+        badge.className = "inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200";
+        badge.textContent = `学習中 (${completedCount} / ${todayTotal})`;
+        banner.classList.add("hidden");
+      }
+    }
+
+    function toggleKnowledgeComplete(id) {
+      if (APP_STATE.completedIds.has(id)) {
+        APP_STATE.completedIds.delete(id);
+        showToast("未完了に戻しました");
+      } else {
+        APP_STATE.completedIds.add(id);
+        showToast("🎉 学習完了としてマークしました！");
+      }
+      saveState();
+      renderApp();
+    }
+
+    function copyPrompt(encodedText) {
+      const text = decodeURIComponent(encodedText);
+      const tempInput = document.createElement("textarea");
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand("copy");
+        showToast("📋 プロンプトをクリップボードにコピーしました！");
+      } catch (err) {
+        showToast("コピーに失敗しました。手動でコピーしてください");
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    let toastTimeout = null;
+    function showToast(message, isSuccess = true) {
+      const toast = document.getElementById("toast");
+      const msgEl = document.getElementById("toastMessage");
+      const iconEl = document.getElementById("toastIcon");
+
+      msgEl.textContent = message;
+      clearTimeout(toastTimeout);
+
+      toast.classList.remove("translate-y-20", "opacity-0");
+      toast.classList.add("translate-y-0", "opacity-100");
+
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove("translate-y-0", "opacity-100");
+        toast.classList.add("translate-y-20", "opacity-0");
+      }, 3000);
+    }
+
+    async function askGeminiDeepDive(knowledgeId) {
+      const item = KNOWLEDGE_BANK.find(k => k.id === knowledgeId);
+      if (!item) return;
+
+      const modal = document.getElementById("aiDetailModal");
+      const titleEl = document.getElementById("aiModalTitle");
+      const catEl = document.getElementById("aiModalCategory");
+      const contentEl = document.getElementById("aiModalContent");
+
+      titleEl.textContent = `${item.title} の深掘り解説`;
+      catEl.textContent = `${item.category} • Gemini 3 Flash が生成中`;
+      contentEl.innerHTML = `
+        <div class="py-10 text-center space-y-3">
+          <div class="inline-block animate-spin text-purple-600">
+            <i data-lucide="loader-2" class="w-8 h-8"></i>
+          </div>
+          <p class="text-slate-500 font-medium">Geminiに実務活用アイデアと詳細解説を問い合わせています...</p>
+        </div>
+      `;
+      lucide.createIcons();
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+
+      const prompt = `あなたはAI・Google Workspaceの専門コンサルタントです。
+以下のテーマについて、実務で今すぐ活かせるより具体的なステップと注意点、応用例を初心者にもわかりやすく丁寧に解説してください。
+
+【テーマ】: ${item.title}
+【カテゴリ】: ${item.category}
+【概要】: ${item.summary}
+【プロンプト例】: ${item.practicalPrompt}
+
+回答構成:
+1. なぜこれが今重要なのか？（1〜2行）
+2. 業務での具体的な活用シーン3選（箇条書き）
+3. よくある失敗と回避テクニック
+4. 今日試せるネクストステップ`;
+
+      try {
+        const apiKey = "";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+        const payload = {
+          contents: [{ parts: [{ text: prompt }] }],
+          systemInstruction: {
+            parts: [{ text: "親切で実践的なビジネスAIトレーナーとして、Markdownを活用して見やすく回答してください。" }]
+          }
+        };
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (text) {
+          // 簡易Markdown変換
+          const formatted = text
+            .replace(/### (.*?)\n/g, '<h4 class="font-bold text-slate-800 text-base mt-4 mb-1">$1</h4>')
+            .replace(/## (.*?)\n/g, '<h3 class="font-bold text-purple-900 text-lg mt-4 mb-2 pb-1 border-b border-purple-100">$1</h3>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900 font-bold">$1</strong>')
+            .replace(/^- (.*?)\n/gm, '<li class="text-sm text-slate-700 ml-4 list-disc">$1</li>')
+            .replace(/\n\n/g, '<p class="my-2 text-sm text-slate-700 leading-relaxed"></p>');
+
+          contentEl.innerHTML = `
+            <div class="bg-purple-50/50 p-4 rounded-2xl border border-purple-100 mb-4">
+              <span class="text-xs font-bold text-purple-700 uppercase tracking-wide">AI Practitioner Guide</span>
+              <p class="text-xs text-slate-600 mt-1">実務での活用精度を最高まで引き上げるためのアドバイスです。</p>
+            </div>
+            <div class="prose prose-sm max-w-none text-slate-700 space-y-2">
+              ${formatted}
+            </div>
+          `;
+        } else {
+          contentEl.innerHTML = `
+            <div class="p-4 bg-amber-50 rounded-xl text-amber-800 text-sm">
+              解説テキストの生成に失敗しました。時間をおいて再試行してください。
+            </div>
+          `;
+        }
+      } catch (err) {
+        console.error(err);
+        contentEl.innerHTML = `
+          <div class="p-4 bg-red-50 rounded-xl text-red-800 text-sm">
+            AIとの通信中にエラーが発生しました。ネットワーク環境をご確認ください。
+          </div>
+        `;
+      }
+    }
+
+    // 今日の3つをGeminiで完全に新しいトピックとして3件生成する機能
+    async function regenerateDailyThreeWithAI() {
+      const btn = document.getElementById("btnGeminiGenerate");
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i><span>生成中...</span>`;
+      btn.disabled = true;
+
+      try {
+        const apiKey = "";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+        const systemInstruction = "あなたは企業のDX・AI活用推進リーダーです。毎日社員向けに配信する『AI全般』『Gemini活用』『Google Workspace効率化』の3つの実践的で役立つ知識を生成してください。";
+        
+        const payload = {
+          contents: [{ parts: [{ text: "明日使える実践知識を以下の3カテゴリから1つずつ、合計3つJSON形式で作成してください: 1. AI全般 2. Gemini 3. Google Workspace" }] }],
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: "ARRAY",
+              items: {
+                type: "OBJECT",
+                properties: {
+                  id: { type: "STRING" },
+                  category: { type: "STRING" },
+                  title: { type: "STRING" },
+                  summary: { type: "STRING" },
+                  practicalPrompt: { type: "STRING" },
+                  actionItem: { type: "STRING" }
+                },
+                required: ["id", "category", "title", "summary", "practicalPrompt", "actionItem"]
+              }
+            }
+          },
+          systemInstruction: { parts: [{ text: systemInstruction }] }
+        };
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        const jsonText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (jsonText) {
+          const newItems = JSON.parse(jsonText);
+          newItems.forEach((item, idx) => {
+            item.categoryColor = item.category === "Gemini" 
+              ? "bg-purple-100 text-purple-800 border-purple-200" 
+              : item.category === "Google Workspace" 
+                ? "bg-emerald-100 text-emerald-800 border-emerald-200" 
+                : "bg-blue-100 text-blue-800 border-blue-200";
+            item.tags = ["最新AI", "Gemini生成"];
+            item.id = `ai_gen_${Date.now()}_${idx}`;
+          });
+
+          APP_STATE.todayItems = newItems;
+          APP_STATE.completedIds.clear();
+          renderApp();
+          showToast("✨ Geminiが今日の新しい3つの知識を生成しました！");
+        }
+      } catch (err) {
+        console.error("AI Generation Error:", err);
+        showToast("生成に失敗しました。元のデータセットを表示します。");
+      } finally {
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+        lucide.createIcons();
+      }
+    }
+
+    function checkDeliveryNotification() {
+      // 配信時間の監視（タブを開いているとき）
+      const now = new Date();
+      const currentHoursMinutes = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      if (currentHoursMinutes === APP_STATE.deliveryTime && now.getSeconds() < 10) {
+        if ("Notification" in window && Notification.permission === "granted") {
+          new Notification("🔔 AI & Workspace 毎日の3つの知識", {
+            body: "本日のAI・Gemini・Google Workspaceの3つの知識が届いています！チェックして業務をスピードアップしましょう。",
+            icon: "https://placehold.co/128x128/2563eb/ffffff?text=AI3"
+          });
+        }
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadState();
+      renderApp();
+
+      // 定期タイマー（毎分通知チェック）
+      setInterval(checkDeliveryNotification, 30000);
+
+      // 文字サイズ変更 A- / A+ ボタン
+      document.getElementById("btnFontDec").addEventListener("click", () => {
+        const curIndex = FONT_SIZE_SEQUENCE.indexOf(APP_STATE.fontSize);
+        if (curIndex > 0) {
+          applyFontSize(FONT_SIZE_SEQUENCE[curIndex - 1]);
+          showToast(`文字サイズ: ${FONT_SIZE_LABELS[FONT_SIZE_SEQUENCE[curIndex - 1]]}`);
+        }
+      });
+
+      document.getElementById("btnFontInc").addEventListener("click", () => {
+        const curIndex = FONT_SIZE_SEQUENCE.indexOf(APP_STATE.fontSize);
+        if (curIndex < FONT_SIZE_SEQUENCE.length - 1) {
+          applyFontSize(FONT_SIZE_SEQUENCE[curIndex + 1]);
+          showToast(`文字サイズ: ${FONT_SIZE_LABELS[FONT_SIZE_SEQUENCE[curIndex + 1]]}`);
+        }
+      });
+
+      // 設定モーダル制御
+      const settingsModal = document.getElementById("settingsModal");
+      const btnOpenSettings = document.getElementById("btnOpenSettings");
+      const btnCloseSettings = document.getElementById("btnCloseSettings");
+      const btnSaveSettings = document.getElementById("btnSaveSettings");
+      const inputDeliveryTime = document.getElementById("inputDeliveryTime");
+
+      btnOpenSettings.addEventListener("click", () => {
+        inputDeliveryTime.value = APP_STATE.deliveryTime;
+        applyFontSize(APP_STATE.fontSize);
+        settingsModal.classList.remove("hidden");
+        settingsModal.classList.add("flex");
+      });
+
+      const closeSettings = () => {
+        settingsModal.classList.add("hidden");
+        settingsModal.classList.remove("flex");
+      };
+
+      btnCloseSettings.addEventListener("click", closeSettings);
+
+      btnSaveSettings.addEventListener("click", () => {
+        if (inputDeliveryTime.value) {
+          APP_STATE.deliveryTime = inputDeliveryTime.value;
+        }
+        saveState();
+        renderApp();
+        closeSettings();
+        showToast("⚙️ 配信時間と文字サイズの設定を保存しました！");
+      });
+
+      // 文字サイズボタングリッドのクリック
+      document.querySelectorAll(".font-size-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const selectedSize = btn.getAttribute("data-size");
+          applyFontSize(selectedSize);
+        });
+      });
+
+      // 通知テストボタン
+      document.getElementById("btnTestNotification").addEventListener("click", () => {
+        if ("Notification" in window) {
+          if (Notification.permission === "granted") {
+            new Notification("🔔 配信リマインダーのテスト", {
+              body: `毎日 ${APP_STATE.deliveryTime} に新しいAI & WorkspaceのTipsをお届けします！`,
+            });
+            showToast("テスト通知を送信しました！");
+          } else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(permission => {
+              if (permission === "granted") {
+                new Notification("🔔 配信リマインダーのテスト", {
+                  body: `通知が有効化されました！毎日の学習をサポートします。`,
+                });
+                showToast("通知を許可しました！");
+              } else {
+                showToast("通知が許可されませんでした。ブラウザの設定をご確認ください。");
+              }
+            });
+          } else {
+            showToast("ブラウザの通知が無効になっています。");
+          }
+        } else {
+          showToast("お使いの環境はデスクトップ通知をサポートしていません。");
+        }
+      });
+
+      // タブ切り替え
+      const tabToday = document.getElementById("tabToday");
+      const tabArchive = document.getElementById("tabArchive");
+
+      tabToday.addEventListener("click", () => {
+        APP_STATE.activeTab = "today";
+        tabToday.className = "px-4 py-2 rounded-xl text-sm font-semibold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 transition";
+        tabArchive.className = "px-4 py-2 rounded-xl text-sm font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-sm flex items-center gap-1.5 transition";
+        renderApp();
+      });
+
+      tabArchive.addEventListener("click", () => {
+        APP_STATE.activeTab = "archive";
+        tabArchive.className = "px-4 py-2 rounded-xl text-sm font-semibold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 transition";
+        tabToday.className = "px-4 py-2 rounded-xl text-sm font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-sm flex items-center gap-1.5 transition";
+        renderApp();
+      });
+
+      // AIで今日の3つを再生成
+      document.getElementById("btnGeminiGenerate").addEventListener("click", regenerateDailyThreeWithAI);
+
+      // AI詳細モーダルのクローズ
+      const aiModal = document.getElementById("aiDetailModal");
+      const closeAiModal = () => {
+        aiModal.classList.add("hidden");
+        aiModal.classList.remove("flex");
+      };
+      document.getElementById("btnCloseAiModal").addEventListener("click", closeAiModal);
+      document.getElementById("btnCloseAiModalBtn").addEventListener("click", closeAiModal);
+    });
+  </script>
+</body>
+</html>
