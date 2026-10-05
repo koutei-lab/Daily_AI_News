@@ -4,6 +4,104 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daily AI & Workspace Knowledge - 毎日3つのAI知識</title>
+
+  <!-- iOS Safari ホーム画面追加（PWA / Webクリップ）用メタタグ -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="AI & WS">
+  <meta name="application-name" content="AI & WS">
+  <meta name="theme-color" content="#2563eb">
+
+  <!-- Apple Touch Icon & ファビコン用プレースホルダー -->
+  <link rel="apple-touch-icon" id="appleTouchIcon" sizes="180x180">
+  <link rel="apple-touch-icon-precomposed" id="appleTouchIconPrecomposed" sizes="180x180">
+  <link rel="icon" type="image/png" id="faviconPng" sizes="192x192">
+  <link rel="manifest" id="dynamicManifest">
+
+  <!-- Safari用高解像度アイコン即時生成スクリプト -->
+  <script>
+    (function generateAppIcons() {
+      // 180x180 のオフスクリーンCanvasを作成し、Safari用の鮮明なアプリアイコンを描画
+      const canvas = document.createElement('canvas');
+      canvas.width = 180;
+      canvas.height = 180;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // 1. 背景グラデーション（iOSが自動で角丸マスクするため全面塗り）
+      const grad = ctx.createLinearGradient(0, 0, 180, 180);
+      grad.addColorStop(0, '#3b82f6');
+      grad.addColorStop(0.5, '#2563eb');
+      grad.addColorStop(1, '#1d4ed8');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 180, 180);
+
+      // 2. 繊細な背景リング（知性と連携を象徴）
+      ctx.beginPath();
+      ctx.ellipse(90, 90, 68, 28, Math.PI / 6, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // 3. 中央のGeminiスター（4芒星）
+      ctx.save();
+      ctx.translate(90, 90);
+      ctx.beginPath();
+      const rOuter = 46;
+      const rInner = 12;
+      for (let i = 0; i < 4; i++) {
+        const a1 = (i * Math.PI) / 2;
+        const a2 = a1 + Math.PI / 4;
+        const x1 = Math.cos(a1) * rOuter;
+        const y1 = Math.sin(a1) * rOuter;
+        const x2 = Math.cos(a2) * rInner;
+        const y2 = Math.sin(a2) * rInner;
+        if (i === 0) ctx.moveTo(x1, y1);
+        else ctx.lineTo(x1, y1);
+        ctx.lineTo(x2, y2);
+      }
+      ctx.closePath();
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
+      ctx.shadowBlur = 10;
+      ctx.shadowOffsetY = 4;
+      ctx.fill();
+      ctx.restore();
+
+      // 4. 右上のアクセントきらめき
+      ctx.beginPath();
+      ctx.arc(136, 44, 7, 0, Math.PI * 2);
+      ctx.fillStyle = '#bfdbfe';
+      ctx.fill();
+
+      const iconDataUrl = canvas.toDataURL('image/png');
+
+      // <head> 内のリンクタグにData URLを即時設定
+      document.getElementById('appleTouchIcon').href = iconDataUrl;
+      document.getElementById('appleTouchIconPrecomposed').href = iconDataUrl;
+      document.getElementById('faviconPng').href = iconDataUrl;
+
+      // PWA Web App Manifestも動的に生成して適用
+      const manifest = {
+        name: "Daily AI & Workspace Knowledge",
+        short_name: "AI & WS",
+        start_url: window.location.href,
+        display: "standalone",
+        background_color: "#ffffff",
+        theme_color: "#2563eb",
+        icons: [
+          {
+            src: iconDataUrl,
+            sizes: "180x180",
+            type: "image/png"
+          }
+        ]
+      };
+      const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+      document.getElementById('dynamicManifest').href = URL.createObjectURL(manifestBlob);
+    })();
+  </script>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
