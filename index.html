@@ -3,782 +3,852 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily AI & Workspace Knowledge - 毎日3つのAI知識</title>
-
-  <!-- iOS Safari ホーム画面追加（PWA / Webクリップ）用メタタグ -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="AI & WS">
-  <meta name="application-name" content="AI & WS">
-  <meta name="theme-color" content="#2563eb">
-
-  <!-- Apple Touch Icon & ファビコン用プレースホルダー -->
-  <link rel="apple-touch-icon" id="appleTouchIcon" sizes="180x180">
-  <link rel="apple-touch-icon-precomposed" id="appleTouchIconPrecomposed" sizes="180x180">
-  <link rel="icon" type="image/png" id="faviconPng" sizes="192x192">
-  <link rel="manifest" id="dynamicManifest">
-
-  <!-- Safari用高解像度アイコン即時生成スクリプト -->
-  <script>
-    (function generateAppIcons() {
-      // 180x180 のオフスクリーンCanvasを作成し、Safari用の鮮明なアプリアイコンを描画
-      const canvas = document.createElement('canvas');
-      canvas.width = 180;
-      canvas.height = 180;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
-      // 1. 背景グラデーション（iOSが自動で角丸マスクするため全面塗り）
-      const grad = ctx.createLinearGradient(0, 0, 180, 180);
-      grad.addColorStop(0, '#3b82f6');
-      grad.addColorStop(0.5, '#2563eb');
-      grad.addColorStop(1, '#1d4ed8');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 180, 180);
-
-      // 2. 繊細な背景リング（知性と連携を象徴）
-      ctx.beginPath();
-      ctx.ellipse(90, 90, 68, 28, Math.PI / 6, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
-      ctx.lineWidth = 3;
-      ctx.stroke();
-
-      // 3. 中央のGeminiスター（4芒星）
-      ctx.save();
-      ctx.translate(90, 90);
-      ctx.beginPath();
-      const rOuter = 46;
-      const rInner = 12;
-      for (let i = 0; i < 4; i++) {
-        const a1 = (i * Math.PI) / 2;
-        const a2 = a1 + Math.PI / 4;
-        const x1 = Math.cos(a1) * rOuter;
-        const y1 = Math.sin(a1) * rOuter;
-        const x2 = Math.cos(a2) * rInner;
-        const y2 = Math.sin(a2) * rInner;
-        if (i === 0) ctx.moveTo(x1, y1);
-        else ctx.lineTo(x1, y1);
-        ctx.lineTo(x2, y2);
-      }
-      ctx.closePath();
-      ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
-      ctx.shadowBlur = 10;
-      ctx.shadowOffsetY = 4;
-      ctx.fill();
-      ctx.restore();
-
-      // 4. 右上のアクセントきらめき
-      ctx.beginPath();
-      ctx.arc(136, 44, 7, 0, Math.PI * 2);
-      ctx.fillStyle = '#bfdbfe';
-      ctx.fill();
-
-      const iconDataUrl = canvas.toDataURL('image/png');
-
-      // <head> 内のリンクタグにData URLを即時設定
-      document.getElementById('appleTouchIcon').href = iconDataUrl;
-      document.getElementById('appleTouchIconPrecomposed').href = iconDataUrl;
-      document.getElementById('faviconPng').href = iconDataUrl;
-
-      // PWA Web App Manifestも動的に生成して適用
-      const manifest = {
-        name: "Daily AI & Workspace Knowledge",
-        short_name: "AI & WS",
-        start_url: window.location.href,
-        display: "standalone",
-        background_color: "#ffffff",
-        theme_color: "#2563eb",
-        icons: [
-          {
-            src: iconDataUrl,
-            sizes: "180x180",
-            type: "image/png"
-          }
-        ]
-      };
-      const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-      document.getElementById('dynamicManifest').href = URL.createObjectURL(manifestBlob);
-    })();
-  </script>
-
-  <!-- Tailwind CSS CDN -->
+  <title>Daily AI Hub - AI・Gemini・Google Workspace 毎日の3選</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           colors: {
-            brand: {
-              50: '#eff6ff',
-              100: '#dbeafe',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
-            },
-            workspace: {
-              docs: '#4285f4',
-              sheets: '#0f9d58',
-              slides: '#f4b400',
-              gemini: '#8e44ad'
-            }
+            googleBlue: '#1a73e8',
+            googleRed: '#ea4335',
+            googleYellow: '#fbbc04',
+            googleGreen: '#34a853',
+            geminiPurple: '#7c3aed',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
           }
         }
       }
     }
   </script>
-  <!-- Google Fonts & Lucide Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
-
   <style>
-    body {
-      font-family: 'Noto Sans JP', 'Inter', sans-serif;
-      transition: background-color 0.3s ease;
+    /* 左右揺れ・はみ出しの完全防止 */
+    html, body {
+      width: 100% !important;
+      max-width: 100vw !important;
+      overflow-x: hidden !important;
+      position: relative;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
     }
 
-    /* 記事コンテンツ（カード本文）の可変フォントサイズ制御 */
-    .content-size-sm .card-title { font-size: 0.95rem; }
-    .content-size-sm .card-body { font-size: 0.8125rem; }
-    .content-size-sm .card-prompt { font-size: 0.75rem; }
-
-    .content-size-base .card-title { font-size: 1.05rem; }
-    .content-size-base .card-body { font-size: 0.875rem; }
-    .content-size-base .card-prompt { font-size: 0.8125rem; }
-
-    .content-size-lg .card-title { font-size: 1.2rem; }
-    .content-size-lg .card-body { font-size: 1.025rem; line-height: 1.75; }
-    .content-size-lg .card-prompt { font-size: 0.925rem; line-height: 1.6; }
-
-    .content-size-xl .card-title { font-size: 1.35rem; }
-    .content-size-xl .card-body { font-size: 1.15rem; line-height: 1.85; }
-    .content-size-xl .card-prompt { font-size: 1.05rem; line-height: 1.7; }
-
-    /* スムーズスクロールとカスタムスクロールバー */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+    .glass-card {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(8px);
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
-    ::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.05);
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
     }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(100, 116, 139, 0.3);
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
       border-radius: 9999px;
     }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(100, 116, 139, 0.5);
+
+    /* 本文とプロンプトの読みやすさに最適化したフォントサイズ（大きすぎず自然なバランス） */
+    body.font-standard {
+      --reading-size: 0.94rem;
+      --reading-lh: 1.68;
+      --prompt-size: 0.84rem;
+      --title-size: 1.05rem;
     }
-    .card-hover-effect {
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    body.font-large {
+      --reading-size: 1.05rem;
+      --reading-lh: 1.75;
+      --prompt-size: 0.92rem;
+      --title-size: 1.16rem;
     }
-    .card-hover-effect:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    body.font-xlarge {
+      --reading-size: 1.18rem;
+      --reading-lh: 1.82;
+      --prompt-size: 1.0rem;
+      --title-size: 1.26rem;
+    }
+
+    .card-title {
+      font-size: var(--title-size, 1.25rem);
+      line-height: 1.35;
+      word-break: break-word;
+    }
+    .reading-content {
+      font-size: var(--reading-size, 1.25rem);
+      line-height: var(--reading-lh, 1.85);
+      letter-spacing: 0.015em;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+    .prompt-box {
+      font-size: var(--prompt-size, 1.05rem);
+      line-height: 1.65;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-blue-100 selection:text-blue-900">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-blue-100 selection:text-googleBlue font-standard w-full overflow-x-hidden">
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs transition-colors">
-    <div class="max-w-4xl mx-auto px-3.5 py-2.5 flex items-center justify-between gap-2">
-      <!-- アプリロゴ & タイトル -->
-      <div class="flex items-center gap-2.5 min-w-0">
-        <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shrink-0 shadow-xs">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C12 7.5 7.5 12 2 12C7.5 12 12 16.5 12 22C12 16.5 16.5 12 22 12C16.5 12 12 7.5 12 2Z" fill="white"/>
-            <circle cx="19" cy="5" r="2" fill="#93C5FD"/>
-          </svg>
+  <!-- Smart & Compact Header (iPhoneの横幅375pxでも絶対に横スクロールしない設計) -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs w-full overflow-hidden">
+    <div class="max-w-6xl mx-auto px-2.5 sm:px-4 py-2 flex items-center justify-between gap-1 w-full">
+      <!-- Logo & App Name -->
+      <div class="flex items-center gap-1.5 shrink-0 min-w-0">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-xs shrink-0">
+          <i class="fa-solid fa-brain text-xs sm:text-sm"></i>
         </div>
-
-        <div class="min-w-0">
-          <div class="flex items-center gap-1.5 leading-none">
-            <h1 class="font-bold text-slate-900 tracking-tight text-sm sm:text-base truncate">AI & Workspace</h1>
-            <span class="text-[10px] px-1 py-0.5 rounded-full bg-blue-100 text-blue-700 font-semibold shrink-0">Daily</span>
-          </div>
-          <p class="text-[11px] text-slate-400 font-medium truncate mt-0.5" id="headerDateText">読み込み中...</p>
+        <div class="flex items-center gap-1 leading-none">
+          <span class="font-black text-sm text-slate-900 tracking-tight">Daily AI</span>
+          <span class="text-[9px] font-bold px-1 py-0.5 rounded bg-blue-100 text-googleBlue uppercase">3選</span>
         </div>
       </div>
 
-      <!-- クイック操作（文字サイズボタン & 設定モーダル起動） -->
-      <div class="flex items-center gap-1.5 shrink-0">
-        <!-- 文字サイズクイックセレクター（固定コンパクト幅で崩れ防止） -->
-        <div class="flex items-center bg-slate-100/90 p-0.5 rounded-xl border border-slate-200/80">
-          <button id="btnFontDec" title="文字を小さく" class="p-1.5 rounded-lg hover:bg-white text-slate-600 hover:text-slate-900 active:scale-95 transition">
-            <span class="text-[11px] font-bold px-0.5">A-</span>
+      <!-- Quick Action Controls (省スペース化) -->
+      <div class="flex items-center gap-1 shrink-0">
+        <!-- View Toggle Buttons -->
+        <div class="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs">
+          <button id="btnViewToday" onclick="switchView('today')" class="px-2 py-1 font-bold rounded-md bg-white text-slate-900 shadow-xs transition whitespace-nowrap text-[11px]">
+            今日
           </button>
-          <span id="currentFontSizeBadge" class="text-[11px] w-10 text-center font-bold text-slate-700 select-none">標準</span>
-          <button id="btnFontInc" title="文字を大きく" class="p-1.5 rounded-lg hover:bg-white text-slate-600 hover:text-slate-900 active:scale-95 transition">
-            <span class="text-[11px] font-bold px-0.5">A+</span>
+          <button id="btnViewArchive" onclick="switchView('archive')" class="px-2 py-1 font-bold rounded-md text-slate-500 hover:text-slate-800 transition whitespace-nowrap text-[11px]">
+            一覧
           </button>
         </div>
 
-        <!-- 設定ボタン -->
-        <button id="btnOpenSettings" class="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 active:scale-95 shadow-xs text-slate-700 transition flex items-center justify-center shrink-0" aria-label="設定">
-          <i data-lucide="settings" class="w-4 h-4"></i>
+        <!-- Font Size Switcher Button -->
+        <button onclick="cycleFontSize()" class="h-7 px-1.5 sm:px-2 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-[11px] font-bold transition flex items-center gap-0.5 shrink-0" title="文字サイズ変更（標準・大・特大）">
+          <i class="fa-solid fa-text-height text-googleBlue text-[10px]"></i>
+          <span id="fontSizeDisplay">標準</span>
+        </button>
+
+        <!-- Scheduled Time Button -->
+        <button onclick="openScheduleModal()" class="h-7 px-1.5 sm:px-2 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-googleBlue text-[11px] font-bold transition flex items-center gap-1 shrink-0" title="配信時刻の設定">
+          <i class="fa-regular fa-clock text-[10px]"></i>
+          <span id="navTimeDisplay" class="font-mono text-[11px]">08:00</span>
         </button>
       </div>
     </div>
   </header>
 
-  <main class="flex-1 max-w-4xl w-full mx-auto px-3.5 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
-
-    <!-- 配信時間インフォ & 継続ストリークバナー（折り返しに強いグリッド・フレックス構造） -->
-    <div class="bg-gradient-to-r from-blue-50/90 via-indigo-50/50 to-slate-50 text-slate-800 rounded-2xl p-4 sm:p-5 border border-blue-100/80 shadow-xs">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div class="space-y-1.5 min-w-0">
-          <!-- 上段: タイトルと配信時間・進捗状況 -->
-          <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-            <h2 class="text-base sm:text-lg font-bold tracking-tight text-slate-900">
-              今日の3つの知識
-            </h2>
-            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-blue-100/90 text-blue-700 border border-blue-200 shrink-0">
-              <i data-lucide="clock" class="w-3 h-3 mr-1 inline"></i>
-              <span id="deliveryTimeDisplay" class="font-bold">08:00</span>
-            </span>
-            <span id="todayProgressBadge" class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0">
-              未完了 (0 / 3)
-            </span>
+  <main class="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-6 py-4 space-y-4 overflow-x-hidden">
+    <!-- === TODAY VIEW === -->
+    <div id="todayView" class="space-y-4">
+      <!-- Date Bar & Controls -->
+      <div class="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
+            <i class="fa-regular fa-calendar-check text-googleBlue text-xs"></i>
+            <span id="currentDateDisplay">本日の日付</span>
+            <span class="text-slate-300">•</span>
+            <span id="dayTopicSeed" class="text-slate-700 font-bold">本日の厳選3トピック</span>
           </div>
-          <!-- 下段テキスト -->
-          <p class="text-xs text-slate-500 leading-snug">
-            日替わりで1日3分、AIとWorkspaceの時短スキルを習得
+          <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight mt-0.5">
+            今日身につける3つのAIナレッジ
+          </h2>
+        </div>
+
+        <!-- Date navigation & action buttons -->
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <div class="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs">
+            <button onclick="changeDayOffset(-1)" class="px-2 py-1 font-semibold rounded text-slate-600 hover:text-slate-900 text-xs">
+              <i class="fa-solid fa-chevron-left text-[10px]"></i>
+            </button>
+            <button onclick="resetToToday()" class="px-2 py-1 font-bold rounded bg-white text-slate-800 shadow-xs text-xs">
+              今日
+            </button>
+            <button onclick="changeDayOffset(1)" class="px-2 py-1 font-semibold rounded text-slate-600 hover:text-slate-900 text-xs">
+              <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            </button>
+          </div>
+          <button onclick="triggerImmediateAiGeneration()" class="px-2.5 py-1.5 text-xs font-bold rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 flex items-center gap-1 transition">
+            <i class="fa-solid fa-wand-magic-sparkles text-[11px]"></i>
+            <span>AI新作</span>
+          </button>
+          <button onclick="openDeepQuizModal()" class="px-2.5 py-1.5 text-xs font-bold rounded-lg bg-googleBlue text-white hover:bg-blue-600 shadow-xs flex items-center gap-1 transition">
+            <i class="fa-solid fa-graduation-cap text-[11px]"></i>
+            <span>クイズ</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3 Daily Knowledge Cards Grid (JS inserts 3 cards here) -->
+      <div id="cardsGrid" class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <!-- Rendered by renderDailyView() -->
+      </div>
+
+      <!-- Daily Progress Banner -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 text-white rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="space-y-1 max-w-xl">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 text-blue-200 text-xs font-medium">
+            <i class="fa-solid fa-circle-check text-googleGreen"></i>
+            <span id="completedCountText">今日の達成度: 0 / 3 完了</span>
+          </div>
+          <h3 class="text-base sm:text-lg font-bold">今日のインプットを完了して仕事に活かす</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            3つのカードを読んだら「完了」をチェック！「実務の応用案」から今日の業務に合わせた連動アイデアもGeminiに相談できます。
           </p>
         </div>
-
-        <!-- 小さく目立たない連続学習ストリークバッジ（自動左揃え/右揃え） -->
-        <div class="self-start sm:self-center inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200/90 text-xs text-slate-600 shadow-xs shrink-0">
-          <span class="text-amber-500 text-sm leading-none">🔥</span>
-          <span class="text-[11px] text-slate-400">連続</span>
-          <span id="streakCount" class="font-bold text-amber-600">1</span>
-          <span class="text-[11px] text-slate-400">日目</span>
+        <div class="flex items-center gap-2 w-full md:w-auto">
+          <button onclick="markAllCompletedToday()" class="flex-1 md:flex-initial px-4 py-2.5 rounded-xl bg-white text-slate-900 font-bold text-xs sm:text-sm shadow-xs hover:bg-slate-100 transition flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-check-double text-googleGreen"></i>
+            <span>3つすべて読了</span>
+          </button>
+          <button onclick="askGeminiForWorkPlan()" class="flex-1 md:flex-initial px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-lightbulb text-googleYellow"></i>
+            <span>実務の応用案</span>
+          </button>
         </div>
       </div>
     </div>
 
-    <div class="flex flex-wrap items-center justify-between gap-2.5 pt-0.5">
-      <div class="flex items-center gap-2" role="tablist">
-        <button id="tabToday" class="px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold bg-blue-600 text-white shadow-xs flex items-center gap-1.5 transition">
-          <i data-lucide="sun" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
-          <span>今日の3つ</span>
-        </button>
-        <button id="tabArchive" class="px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-xs flex items-center gap-1.5 transition">
-          <i data-lucide="library" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
-          <span>過去のライブラリ</span>
-        </button>
-      </div>
-
-      <!-- アクションボタン -->
-      <div class="flex items-center gap-2">
-        <button id="btnGeminiGenerate" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 flex items-center gap-1.5 transition active:scale-95 shadow-xs" title="Gemini AIで別のテーマを今すぐ生成">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-600"></i>
-          <span>AIで再生成</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- コンテンツカードコンテナ -->
-    <div id="cardsContainer" class="space-y-4">
-      <!-- 動的にJavaScriptから3つの知識カードを描画します -->
-      <div class="p-8 text-center bg-white rounded-2xl border border-slate-200 shadow-sm">
-        <div class="inline-block animate-spin text-blue-600 mb-2">
-          <i data-lucide="loader-2" class="w-8 h-8"></i>
+    <!-- === ARCHIVE VIEW === -->
+    <div id="archiveView" class="hidden space-y-4">
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">ナレッジライブラリ & 逆引き検索</h2>
+          <p class="text-xs text-slate-500">過去の知識ストックからいつでも復習・検索できます。</p>
         </div>
-        <p class="text-slate-500 font-medium text-xs sm:text-sm">知識カードを読み込んでいます...</p>
+        <div class="relative w-full sm:w-64">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+          <input type="text" id="archiveSearchInput" oninput="filterArchive()" placeholder="キーワードで探す..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-googleBlue bg-slate-50 focus:bg-white">
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+        <button onclick="setArchiveCategory('all')" class="cat-pill active px-3 py-1.5 rounded-full font-bold transition bg-slate-900 text-white" data-cat="all">すべて (<span id="countAll">0</span>)</button>
+        <button onclick="setArchiveCategory('ai')" class="cat-pill px-3 py-1.5 rounded-full font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200" data-cat="ai">💡 AI全般 (<span id="countAi">0</span>)</button>
+        <button onclick="setArchiveCategory('gemini')" class="cat-pill px-3 py-1.5 rounded-full font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200" data-cat="gemini">✨ Gemini (<span id="countGemini">0</span>)</button>
+        <button onclick="setArchiveCategory('workspace')" class="cat-pill px-3 py-1.5 rounded-full font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200" data-cat="workspace">📂 Workspace (<span id="countWorkspace">0</span>)</button>
+        <button onclick="setArchiveCategory('favorites')" class="cat-pill px-3 py-1.5 rounded-full font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200" data-cat="favorites">⭐ お気に入り (<span id="countFav">0</span>)</button>
+      </div>
+
+      <!-- Archive Cards Grid -->
+      <div id="archiveGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Populated dynamically -->
       </div>
     </div>
-
-    <div id="allCompleteBanner" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-5 text-center shadow-sm">
-      <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-500 text-white rounded-full text-2xl mb-2 shadow-md">
-        🎉
-      </div>
-      <h3 class="text-lg font-bold text-emerald-900">本日の3つの知識をすべて達成しました！</h3>
-      <p class="text-sm text-emerald-700 mt-1 max-w-md mx-auto">
-        素晴らしい学習継続力です！明日も指定の時間（<span class="deliveryTimeEcho font-semibold">08:00</span>）に新しい3つの知識をお届けします。
-      </p>
-    </div>
-
   </main>
 
-  <div id="settingsModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 transform transition-all animate-in fade-in zoom-in-95 duration-200">
-      
-      <!-- モーダルヘッダー -->
-      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
-        <div class="flex items-center gap-2.5">
-          <div class="p-2 rounded-xl bg-blue-50 text-blue-600">
-            <i data-lucide="sliders" class="w-5 h-5"></i>
-          </div>
-          <h3 class="text-lg font-bold text-slate-900">配信＆表示設定</h3>
-        </div>
-        <button id="btnCloseSettings" class="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <!-- モーダル本体 -->
-      <div class="py-5 space-y-6">
-
-        <!-- 1. 配信時間（はいしんじかん）の設定 -->
-        <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <label for="inputDeliveryTime" class="font-bold text-slate-800 flex items-center gap-2 text-sm md:text-base">
-              <i data-lucide="bell-ring" class="w-4 h-4 text-blue-600"></i>
-              <span>毎日の配信リマインダー時間</span>
-            </label>
-            <span class="text-xs px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold">毎日通知</span>
-          </div>
-          <p class="text-xs text-slate-500 leading-relaxed">
-            毎朝または学習したい時間に新しい3つの知識を確認するための目安時間です。
-          </p>
-          <div class="flex items-center gap-3 pt-1">
-            <input type="time" id="inputDeliveryTime" value="08:00" class="px-4 py-2.5 rounded-xl border border-slate-300 font-semibold text-slate-800 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-base">
-            <button id="btnTestNotification" class="px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5">
-              <i data-lucide="bell" class="w-3.5 h-3.5"></i>
-              <span>通知テスト</span>
-            </button>
-          </div>
-        </div>
-
-        <hr class="border-slate-100">
-
-        <!-- 2. もじのおおきさ（文字サイズ）の設定 -->
-        <div class="space-y-3">
-          <label class="font-bold text-slate-800 flex items-center gap-2 text-sm md:text-base">
-            <i data-lucide="type" class="w-4 h-4 text-indigo-600"></i>
-            <span>もじのおおきさ（文字サイズ）</span>
-          </label>
-          <p class="text-xs text-slate-500 leading-relaxed">
-            読みやすいお好みの文字の大きさを選んでください。画面全体の文字が連動して変化します。
-          </p>
-
-          <!-- 4段階の文字サイズ選択肢 -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1" id="fontSizeOptionGrid">
-            <button data-size="sm" class="font-size-btn p-3 rounded-2xl border text-center transition flex flex-col items-center justify-center gap-1">
-              <span class="text-xs font-semibold text-slate-600">小さめ</span>
-              <span class="text-xs font-bold text-slate-900">14px</span>
-            </button>
-            <button data-size="base" class="font-size-btn p-3 rounded-2xl border text-center transition flex flex-col items-center justify-center gap-1">
-              <span class="text-xs font-semibold text-slate-600">標準</span>
-              <span class="text-sm font-bold text-slate-900">16px</span>
-            </button>
-            <button data-size="lg" class="font-size-btn p-3 rounded-2xl border text-center transition flex flex-col items-center justify-center gap-1">
-              <span class="text-xs font-semibold text-slate-600">大きめ</span>
-              <span class="text-base font-bold text-slate-900">18px</span>
-            </button>
-            <button data-size="xl" class="font-size-btn p-3 rounded-2xl border text-center transition flex flex-col items-center justify-center gap-1">
-              <span class="text-xs font-semibold text-slate-600">特大</span>
-              <span class="text-lg font-bold text-slate-900">20px</span>
-            </button>
-          </div>
-
-          <!-- プレビュー表示用ボックス -->
-          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 mt-2">
-            <span class="text-xs text-slate-400 font-semibold block mb-1">文字サイズプレビュー:</span>
-            <p class="text-slate-800 font-medium leading-relaxed">
-              「GeminiとGoogle Workspaceを活用して日々の仕事を劇的にスマートに！」
-            </p>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- モーダルフッター -->
-      <div class="flex items-center justify-end gap-2 pt-4 border-t border-slate-100">
-        <button id="btnSaveSettings" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/20 active:scale-95 transition">
-          設定を保存する
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <div id="aiDetailModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col p-6 shadow-2xl border border-slate-200">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+  <!-- Delivery Schedule Setting Modal -->
+  <div id="scheduleModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2">
-          <div class="p-2 rounded-xl bg-purple-100 text-purple-700">
-            <i data-lucide="bot" class="w-5 h-5"></i>
+          <div class="w-9 h-9 rounded-xl bg-blue-100 text-googleBlue flex items-center justify-center">
+            <i class="fa-regular fa-clock text-base"></i>
           </div>
           <div>
-            <h3 class="font-bold text-slate-900" id="aiModalTitle">AI解説</h3>
-            <span class="text-xs text-slate-500" id="aiModalCategory">AI深掘り</span>
+            <h3 class="font-bold text-slate-900 text-base">毎日の作成・更新時刻</h3>
+            <p class="text-[11px] text-slate-500">指定時刻に合わせて新しい3知識をお届けします</p>
           </div>
         </div>
-        <button id="btnCloseAiModal" class="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition">
-          <i data-lucide="x" class="w-5 h-5"></i>
+        <button onclick="closeModal('scheduleModal')" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-base"></i>
         </button>
       </div>
-      <div id="aiModalContent" class="py-4 overflow-y-auto space-y-4 text-slate-700 leading-relaxed flex-1">
-        <!-- AIレスポンスがここに入ります -->
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">指定時刻（毎日）</label>
+          <input type="time" id="scheduleTimeInput" value="08:00" class="text-lg font-bold p-2.5 rounded-xl border border-slate-300 w-full focus:outline-none focus:ring-2 focus:ring-googleBlue bg-slate-50">
+          <p class="text-[11px] text-slate-500 mt-1">
+            出勤時や始業時（例: 07:30 や 08:30）に合わせるのがおすすめです。
+          </p>
+        </div>
+
+        <div class="bg-blue-50/70 rounded-xl p-3 border border-blue-100 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-blue-900">ブラウザ通知リマインダー</span>
+            <input type="checkbox" id="notificationCheckbox" class="w-4 h-4 rounded text-googleBlue focus:ring-googleBlue cursor-pointer">
+          </div>
+          <p class="text-[11px] text-blue-700">
+            指定時刻にブラウザ通知で「本日のAIナレッジ3選」をお知らせします。
+          </p>
+        </div>
       </div>
-      <div class="pt-3 border-t border-slate-100 flex justify-end">
-        <button id="btnCloseAiModalBtn" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition">
+
+      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+        <button onclick="closeModal('scheduleModal')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
           閉じる
+        </button>
+        <button onclick="saveScheduleSettings()" class="px-4 py-2 rounded-xl bg-googleBlue hover:bg-blue-600 text-white text-xs font-bold shadow-xs">
+          設定を保存
         </button>
       </div>
     </div>
   </div>
 
-  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 max-w-sm">
-    <i data-lucide="check-circle" id="toastIcon" class="w-5 h-5 text-emerald-400 shrink-0"></i>
-    <span id="toastMessage" class="text-xs sm:text-sm font-medium">通知メッセージ</span>
+  <!-- AI Deep Dive Modal -->
+  <div id="aiModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-xl overflow-hidden border border-slate-200">
+      <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-r from-googleBlue to-purple-600 flex items-center justify-center text-white text-xs shadow-xs">
+            <i class="fa-solid fa-sparkles"></i>
+          </div>
+          <div>
+            <h3 id="aiModalTitle" class="font-bold text-slate-900 text-sm leading-none">Gemini AI 深掘り解説</h3>
+            <p id="aiModalSubtitle" class="text-[11px] text-slate-500 mt-0.5">実務での活用シナリオと応用プロンプト</p>
+          </div>
+        </div>
+        <button onclick="closeModal('aiModal')" class="w-7 h-7 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <div id="aiModalBody" class="p-5 overflow-y-auto custom-scrollbar flex-1 space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="p-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+        <span id="aiModalFooterStatus" class="text-[11px] text-slate-500 font-medium">実務解説ガイド</span>
+        <div class="flex items-center gap-2">
+          <button id="aiModalRetryBtn" onclick="retryDeepDive()" class="hidden px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-rotate-right text-xs"></i>
+            <span>AI再試行</span>
+          </button>
+          <button onclick="closeModal('aiModal')" class="px-3.5 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold">
+            閉じる
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Modal -->
+  <div id="quizModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full max-h-[85vh] flex flex-col shadow-xl overflow-hidden border border-slate-200">
+      <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-googleBlue text-white flex items-center justify-center shadow-xs">
+            <i class="fa-solid fa-graduation-cap text-xs"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm leading-none">今日の理解度ミニテスト</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">3つの知識から1問ずつ挑戦！</p>
+          </div>
+        </div>
+        <button onclick="closeModal('quizModal')" class="w-7 h-7 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <div id="quizContainer" class="p-5 overflow-y-auto custom-scrollbar flex-1 space-y-4">
+        <!-- Rendered by openDeepQuizModal -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Note Edit Modal -->
+  <div id="noteModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-xl border border-slate-200 space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+          <i class="fa-solid fa-pen-to-square text-googleBlue"></i>
+          <span>マイメモ & 業務メモ</span>
+        </h3>
+        <button onclick="closeModal('noteModal')" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+      <p id="noteCardTitle" class="text-xs font-semibold text-slate-500 truncate"></p>
+      <textarea id="noteInput" rows="3" placeholder="業務で試すポイントなどをメモ..." class="w-full p-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-googleBlue"></textarea>
+      <div class="flex justify-end gap-2">
+        <button onclick="closeModal('noteModal')" class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">キャンセル</button>
+        <button onclick="saveNote()" class="px-3.5 py-1.5 rounded-xl bg-googleBlue hover:bg-blue-600 text-white text-xs font-bold">保存する</button>
+      </div>
+    </div>
   </div>
 
   <script>
-    // 豊富な知識マスターデータ（AI全般、Gemini、Google Workspace）
-    const KNOWLEDGE_BANK = [
-      // --- カテゴリ1: AI全般 ---
+    /* Knowledge Database */
+    const KNOWLEDGE_BASE = [
+      // CATEGORY 1: AI (ai)
       {
-        id: "ai_1",
-        category: "AI全般",
-        categoryColor: "bg-blue-100 text-blue-800 border-blue-200",
-        icon: "cpu",
-        title: "ハルシネーション（幻覚）を防ぐ3つの黄金ルール",
-        summary: "LLMは自信満々に誤った情報を出力することがあります。根拠となる参考文をプロンプト内に貼る「グラウンディング」、不明時は「わかりません」と答える指示、出力形式の厳格指定で精度を劇的に向上できます。",
-        practicalPrompt: "「以下の参考テキスト【...】のみに基づいて質問に回答してください。テキストに書かれていない事実は推測せず『資料に記載がありません』と答えてください。」",
-        actionItem: "プロンプトに必ず『参考資料』の枠組みを設けて試す",
-        tags: ["プロンプト技法", "LLM基礎"]
+        id: "ai-1",
+        category: "ai",
+        categoryName: "AI全般・思考法",
+        title: "LLMのハルシネーションを防ぐ『逆質問法』",
+        subtitle: "プロンプトに不確実性を自己申告させる王道技",
+        content: "大規模言語モデル（LLM）は不完全な情報から推測で嘘を答えてしまうことがあります。これを防ぐ最も簡単かつ確実なテクニックが、『情報が不十分な場合や推測が含まれる場合は、勝手に補完せず私に逆質問してください』という指示を末尾に添えることです。",
+        practicalExample: "あなたは経験豊富な法務/経理アシスタントです。以下の契約書条項のリスクを洗い出してください。ただし、文脈上情報が足りず判断できない点があれば、推測で結論を出さず必ず私に逆質問してください。",
+        badge: "プロンプト原則",
+        icon: "fa-solid fa-shield-halved",
+        deepDive: {
+          scenario: "【Before】契約書の確認を丸投げすると、AIが存在しない条項や一般的すぎる見解を事実のように回答。\n【After】「不明点は逆質問せよ」と指定することで、「契約期間と管轄裁判所の記載が抜けています。これらを教えていただけますか？」とAI側から確認が入り、誤判断リスクが劇的に激減。",
+          prompt1: "【契約・規定確認】\n「以下の条項の法的一貫性を点検してください。前提となる社内ルールが不明な箇所は推測せず、箇条書きで逆質問してください。」",
+          prompt2: "【要件定義・企画】\n「この企画書の抜け漏れを診断してください。判断材料が不足するパラメータがあれば、独断で埋めず質問してください。」",
+          tip: "プロンプトの最後に「※憶測で断定しないこと」と念押しを1文添えるだけでも精度が安定します。"
+        }
       },
       {
-        id: "ai_2",
-        category: "AI全般",
-        categoryColor: "bg-blue-100 text-blue-800 border-blue-200",
-        icon: "network",
-        title: "Few-Shotプロンプティングで出力を完全にコントロール",
-        summary: "やりたい指示を言葉で長々と説明するよりも、「入力例」と「期待する出力例」を2〜3組（Shot）見せる方がAIは圧倒的に意図を正確に理解します。表記揺れの統一やデータ抽出に最適です。",
-        practicalPrompt: "入力例1: 鈴木 2026/04/01 東京 -> 出力例1: [SUZUKI-TYO-0401]\n入力例2: 佐藤 2026/05/10 大阪 -> 出力例2: [SATO-OSA-0510]\n入力: 田中 2026/06/15 名古屋 -> 出力:",
-        actionItem: "複雑なフォーマット変換を例示でAIにやらせてみる",
-        tags: ["プロンプト技法", "効率化"]
+        id: "ai-2",
+        category: "ai",
+        categoryName: "AI全般・思考法",
+        title: "Few-Shotプロンプティング（具体例を渡す）",
+        subtitle: "出力の形式とトーンを100%固定化する",
+        content: "AIに対して「きれいにまとめて」と抽象的に言うよりも、理想とする入力と出力のペア（例）を2〜3個見せるだけで、精度とフォーマット遵守率が劇的に上がります。これをFew-Shotプロンプティングと呼びます。",
+        practicalExample: "以下の例に倣って、次のレビューを分類してください。\n【例1】「届くのが遅かった」→ 感情:ネガティブ, 分類:配送\n【例2】「包装が丁寧で感動」→ 感情:ポジティブ, 分類:梱包\n【対象】「商品は最高だが少し重い」→",
+        badge: "精度向上",
+        icon: "fa-solid fa-cubes",
+        deepDive: {
+          scenario: "【Before】顧客アンケートの分類を頼んだが、長文の言い訳やブレた形式で返ってきてExcel集計に使えない。\n【After】2行の入力・出力ペア例を与えたことで、何百件のテキストも指定フォーマット厳守で瞬時に構造化完了。",
+          prompt1: "【形式固定】\n「以下の見本に従い、商談メモから『決定事項』『ToDo』『期限』を抽出してください。\n【例】...」",
+          prompt2: "【トーン統一】\n「以下のトーン例（丁寧・簡潔・敬語）に沿って、お詫びメールの返信文を生成してください。」",
+          tip: "例は1つだけ（One-Shot）より、ポジティブ例とネガティブ例を各1つ含む2〜3例が最も効果的です。"
+        }
       },
       {
-        id: "ai_3",
-        category: "AI全般",
-        categoryColor: "bg-blue-100 text-blue-800 border-blue-200",
-        icon: "git-branch",
-        title: "思考の連鎖（Chain-of-Thought: CoT）の威力",
-        summary: "数学的推論や多角的なビジネス判断をAIに頼むときは、「ステップ・バイ・ステップで順を追って考えてください」と添えるだけで、内部で論理の整理が行われ、正答率が急上昇します。",
-        practicalPrompt: "「このプロジェクトの潜在的リスクを特定してください。結論を急がず、1. 現状分析 2. 障害予測 3. 対策案 のステップ順に思考プロセスを明記して検討してください。」",
-        actionItem: "複雑なタスクで『順を追って考えて』と指示を足してみる",
-        tags: ["推論", "プロンプト技法"]
+        id: "ai-3",
+        category: "ai",
+        categoryName: "AI全般・思考法",
+        title: "思考の連鎖（Chain of Thought: CoT）",
+        subtitle: "「ステップ順に考えて」の一言で正解率アップ",
+        content: "複雑な計算や論理的判断をさせる際、いきなり結論を出させると計算ミスや論理の飛躍が起こります。「結論を出す前に、思考プロセスを箇条書きでステップ順に書き出してください」と指示すると、AIは自らの途中式を参照しながら正しい結論を導きます。",
+        practicalExample: "A社の売上は前年比15%増、営業利益率は3%悪化しました。この要因と改善策を提案してください。※即座に結論を出さず、ステップ1（現状分析）、ステップ2（原因仮説）、ステップ3（施策）の順で思考を展開してください。",
+        badge: "推論力強化",
+        icon: "fa-solid fa-diagram-project",
+        deepDive: {
+          scenario: "【Before】複数部署のコスト配分計算を即答させると、単純な掛け算・割り算の途中で数字の取り違えが発生。\n【After】「ステップごとに計算式と途中経過を書いてから最終数値を出す」と指定し、100%正確な配分表を作成。",
+          prompt1: "【段階的推論】\n「即座に結論を出さず、前提の整理→原因の特定→対応案の順にステップを踏んで考察してください。」",
+          prompt2: "【損益分岐点分析】\n「各固定費と変動費を1項目ずつ算出し、計算根拠を明記した上で目標売上を計算してください。」",
+          tip: "「Step by stepで考えてください」という定番フレーズは、日本語プロンプトでも極めて強力です。"
+        }
       },
       {
-        id: "ai_4",
-        category: "AI全般",
-        categoryColor: "bg-blue-100 text-blue-800 border-blue-200",
-        icon: "eye",
-        title: "マルチモーダルAI活用の勘所：画像＋指示文",
-        summary: "現代のAIは文字だけでなく図表やホワイトボードの落書き、UIデザインのスクリーンショットを直接理解できます。手書きメモのテキストデータ化や、エラー画面スクショからの原因分析に威力を発揮します。",
-        practicalPrompt: "（エラー画面の画像を添付して）「この画面に出ているエラーコードと原因、および最初にとるべき対処手順を初心者向けに箇条書きで示してください。」",
-        actionItem: "スマホで撮った手書き議事録をAIに清書させてみる",
-        tags: ["マルチモーダル", "画像認識"]
+        id: "ai-4",
+        category: "ai",
+        categoryName: "AI全般・思考法",
+        title: "コンテキスト長と情報配置の黄金律",
+        subtitle: "最重要ルールはプロンプトの「最初」と「最後」に置く",
+        content: "現在のLLMは長大なテキストを読めますが、「真ん中にある情報を見落としやすい（Lost in the Middle現象）」という特性があります。重要なルールや出力条件は、入力テキストの冒頭と末尾（再確認）に挟み込むのがベストプラクティスです。",
+        practicalExample: "【制約：要約は300字以内で箇条書き3点】\n（ここに長い会議議事録の本文）\n【再確認：必ず上記制約を守り、箇条書き3点で300字以内で要約してください】",
+        badge: "構造化テク",
+        icon: "fa-solid fa-align-left",
+        deepDive: {
+          scenario: "【Before】長文マニュアルの中盤に書いた禁止事項をAIが見落とし、そのまま禁止表現を含む文章を出力。\n【After】プロンプト冒頭と最末尾に「【最重要制約】〜」と挟み込むサンドイッチ構造で、厳格なルール遵守を実現。",
+          prompt1: "【サンドイッチ指示】\n「【厳守：専門用語は使わず中学生にも伝わる言葉で】\n（長文テキスト）\n【確認：上記の中学生向けの言葉遣いルールを必ず守って要約】」",
+          prompt2: "【出力指定の徹底】\n「【出力形式：JSON配列形式のみ】\n（データ）\n【再度注意：Markdownブロックは出力せず純粋なJSONのみを返答してください】」",
+          tip: "特に長い議事録やPDFテキストを読み込ませる際は、末尾の「再確認ブロック」が威力を発揮します。"
+        }
+      },
+      {
+        id: "ai-5",
+        category: "ai",
+        categoryName: "AI全般・思考法",
+        title: "AIエージェントの概念とツール活用",
+        subtitle: "テキスト生成から自律的なタスク遂行へ進化",
+        content: "AIエージェントとは、単に質問に答えるだけでなく、「Web検索」「電卓」「コード実行」「カレンダーやメールのAPI」などの外部ツールを自ら判断して呼び出し、目的を完遂するシステムです。Google Workspace内のGeminiもこの思想で動いています。",
+        practicalExample: "「競合3社の直近のプレスリリースをWeb検索し、重要トピックを比較表にまとめ、私のGoogleドライブの『競合分析』フォルダに新規保存してください。」",
+        badge: "トレンド",
+        icon: "fa-solid fa-robot",
+        deepDive: {
+          scenario: "【Before】ユーザーが検索し、コピーし、Excelに貼り付け、整形するという手作業を繰り返していた。\n【After】「Web検索＋データ整形＋ドライブ保存」という一連のゴールを指定し、AIが必要なツールを自律連係して完遂。",
+          prompt1: "【情報収集エージェント】\n「〇〇業界の直近1週間の法改正ニュースをWeb検索し、影響度別に3段階でランク付けして要約してください。」",
+          prompt2: "【Workspace連動】\n「来週のGoogleカレンダーの空き時間を抽出し、候補日程3パターンを含む打診メール下書きを作成してください。」",
+          tip: "ツールが実行しやすいよう、「目的（Goal）」「使える情報（Context）」「成果物（Output）」を明確に渡しましょう。"
+        }
       },
 
-      // --- カテゴリ2: Gemini ---
+      // CATEGORY 2: GEMINI (gemini)
       {
-        id: "gemini_1",
-        category: "Gemini",
-        categoryColor: "bg-purple-100 text-purple-800 border-purple-200",
-        icon: "sparkles",
-        title: "Geminiの巨大コンテキストウィンドウ（長文処理）の真価",
-        summary: "Geminiの最大の特徴は100万〜200万トークン規模の圧倒的な長文読解能力です。1時間の会議録音文字起こし、数百ページの決算資料や分厚い社内マニュアルを一括で丸ごと読み込ませて横断検索できます。",
-        practicalPrompt: "「添付した社内規定PDF全体をスキャンし、『慶弔休暇』に関する申請期限・必要書類・承認フローを該当ページ番号とともに整理してください。」",
-        actionItem: "長大な契約書やマニュアルの該当箇所探しを任せる",
-        tags: ["Gemini特長", "資料分析"]
+        id: "gemini-1",
+        category: "gemini",
+        categoryName: "Gemini特化テクニック",
+        title: "Gemini Gems（カスタムAI）で自分専用の分身を作る",
+        subtitle: "毎回同じ前提プロンプトを入力する手間をゼロに",
+        content: "Gemini AdvancedやWorkspaceで使える「Gems」は、役割やルールを事前に設定した専用アシスタントを作成できる機能です。「社内報ライター」「メール返信添削アシスタント」「契約書チェッカー」などを一度定義しておけば、毎日の作業が一発で完了します。",
+        practicalExample: "【Gems設定の指示文例】\nあなたは当社の社内広報マネージャーです。入力された雑多な社内メモから、社員が親しみやすいトーンのSlack告知文（タイトル、要点3点、次回アクション）を絵文字入りで出力してください。",
+        badge: "自動化・効率化",
+        icon: "fa-solid fa-gem",
+        deepDive: {
+          scenario: "【Before】毎回プロンプトに「社内のトーン」「禁止表現」「役職」「フォーマット」をコピペ入力していて面倒。\n【After】専用Gem「メール下書き職人」を1つ作っておくことで、用件を箇条書きで放り込むだけで完璧な返信案が完成。",
+          prompt1: "【Gem指示文：議事録整形】\n「入力された殴り書きメモから、1.決定事項、2.保留事項、3.ToDo（担当/期限）に分類して出力するGemを作成。」",
+          prompt2: "【Gem指示文：カスタマーサポート添削】\n「お問合せ返答メールに対し、クッション言葉と誠実さを補強した添削案を2パターン提示するGemを作成。」",
+          tip: "Gemのプロンプトには『あなたがやってはいけないこと（禁止事項）』も明記すると安定します。"
+        }
       },
       {
-        id: "gemini_2",
-        category: "Gemini",
-        categoryColor: "bg-purple-100 text-purple-800 border-purple-200",
-        icon: "search",
-        title: "Google検索グラウンディングで最新情報を正確に補足",
-        summary: "GeminiはGoogle検索の最新インデックスと直結しています。「最新の〜」「現在発表されている〜」といった検索連動を指示することで、学習カットオフ以降のニュースや競合製品の最新リリース情報を引用付きで取得可能です。",
-        practicalPrompt: "「2026年最新のクラウドセキュリティ動向について、Google検索で信頼性の高い一次情報を参照し、主要な3つの変化を要約してください。」",
-        actionItem: "最新トレンドの調査にGeminiを活用する",
-        tags: ["リアルタイム検索", "情報収集"]
+        id: "gemini-2",
+        category: "gemini",
+        categoryName: "Gemini特化テクニック",
+        title: "超長文コンテキスト（100万〜200万トークン）の活用",
+        subtitle: "100ページのPDFや動画丸ごとを読み込ませて質問",
+        content: "Geminiの最大の強みは圧倒的な入力容量（コンテキストウィンドウ）です。本1冊分に相当する長大なマニュアル、数時間の会議音声、社内規定集全体をドラッグ＆ドロップして「第4条と第12条の矛盾点を指摘して」と尋ねることができます。",
+        practicalExample: "（社内セキュリティ規定PDFを添付）\n「リモートワーク時にカフェの公衆Wi-Fiを利用する際の規定と申請手続きについて、該当するページ番号とともに箇条書きで分かりやすく要約してください。」",
+        badge: "独自強み",
+        icon: "fa-solid fa-file-pdf",
+        deepDive: {
+          scenario: "【Before】300ページの製品仕様書から特定エラーの対処法を探すのに数時間を費やしていた。\n【After】仕様書PDF丸ごとGeminiに渡し「エラーコードE-401の復旧手順と例外条件を教えて」で3秒でピンポイント回答。",
+          prompt1: "【規程横断チェック】\n「添付した3つの契約書草案の間で、損害賠償上限額の定義に食い違いがないか突き合わせてください。」",
+          prompt2: "【動画・音声分析】\n「（会議録画ファイルを添付）発言者Aと発言者Bの意見が対立している論点を整理し、合意に至った理由を要約してください。」",
+          tip: "「参照元のページ番号や章タイトルも併記して」と指定することで、人間の目でダブルチェックしやすくなります。"
+        }
       },
       {
-        id: "gemini_3",
-        category: "Gemini",
-        categoryColor: "bg-purple-100 text-purple-800 border-purple-200",
-        icon: "code",
-        title: "Geminiによるコード生成・Google Apps Script (GAS) 自動化",
-        summary: "GeminiはPythonやJavaScript、特にGoogle Apps Scriptのコード生成が得意です。「スプレッドシートの特定列を検知してメールを自動送信するスクリプト」などを日本語で頼めば数秒で実装コードを出力してくれます。",
-        practicalPrompt: "「Googleスプレッドシートのシート名『進捗』のE列が『完了』になった行を自動的に別シート『アーカイブ』へ移動させるGASコードを、詳細なコメント付きで作成してください。」",
-        actionItem: "日常のWorkspace繰り返し作業をGASコード化してもらう",
-        tags: ["GAS", "コーディング"]
+        id: "gemini-3",
+        category: "gemini",
+        categoryName: "Gemini特化テクニック",
+        title: "Google検索グラウンディングと情報ダブルチェック",
+        subtitle: "回答下の『Gアイコン』でファクトチェック",
+        content: "GeminiはGoogle検索と連携してリアルタイムの情報を取得できます。Web版Geminiでは回答下の「Gアイコン（回答を再確認）」をクリックすると、Web上の情報と一致する部分が緑色でハイライトされ、根拠リンクを即座に確認できます。",
+        practicalExample: "「Google Workspaceの最新プランと各Geminiアドオンの料金体系を表形式でまとめてください。Google公式のソースURLも付記してください。」",
+        badge: "ファクトチェック",
+        icon: "fa-brands fa-google",
+        deepDive: {
+          scenario: "【Before】AIが作った競合製品の価格表をそのまま上司に提出したら、半年前の旧料金で怒られた。\n【After】Gアイコンでのダブルチェックと「公式URL必須」の指定により、一次情報に基づいた裏付けのある提案書を短時間で作成。",
+          prompt1: "【最新市場調査】\n「直近1ヶ月以内に発表された国内SaaS主要3社の新機能アップデートをWeb検索で調査し、比較表にしてください。」",
+          prompt2: "【事実確認指示】\n「この法改正の施行日と猶予期間についてGoogle検索で裏付けを取り、回答の各段落に参照元リンクを添えてください。」",
+          tip: "緑色のハイライトは「Web上の検索結果と一致」、赤/オレンジは「裏付けが見つからないか相違あり」を意味します。"
+        }
+      },
+      {
+        id: "gemini-4",
+        category: "gemini",
+        categoryName: "Gemini特化テクニック",
+        title: "マルチモーダル入力：手書きメモやスクショから表起こし",
+        subtitle: "ホワイトボードの写真をそのままスプレッドシート化",
+        content: "Geminiは視覚認識精度が極めて高く、会議後のホワイトボードの手書きメモやチラシのスクリーンショットを渡すだけで、表データ（CSV形式）やMarkdown形式に一瞬で構造化してくれます。",
+        practicalExample: "（ホワイトボードの写真をアップロード）\n「この写真に書かれているブレスト付箋の内容をすべて読み取り、『課題』『アイデア』『担当者』の3列のスプレッドシート形式の表に整理してください。」",
+        badge: "マルチモーダル",
+        icon: "fa-solid fa-camera",
+        deepDive: {
+          scenario: "【Before】会議後にホワイトボードの付箋文字を手打ちでExcelに書き写す作業に30分かかっていた。\n【After】スマホでパシャリと撮影してGeminiに送るだけで、5秒でコピー可能な表形式テキストに自動変換完了。",
+          prompt1: "【画像から表抽出】\n「この請求書の画像から、品目・数量・単価・消費税・合計金額を抽出し、CSV形式で書き出してください。」",
+          prompt2: "【手書きUIモックアップのコード化】\n「ノートに手書きしたこのWeb画面スケッチを、Tailwind CSSを用いたHTMLコードに変換してください。」",
+          tip: "斜めから撮った写真や暗い画像でも認識しますが、文字が読める程度の明るさを確保すると誤読がゼロに近くなります。"
+        }
+      },
+      {
+        id: "gemini-5",
+        category: "gemini",
+        categoryName: "Gemini特化テクニック",
+        title: "GeminiのDeep Research（深層リサーチ機能）",
+        subtitle: "数十のWebページを自動巡回して包括レポートを執筆",
+        content: "Geminiの「Deep Research」は、1度の指示で複数の検索クエリを自律的に立案・実行し、数分かけて何十もの情報源を統合した包括的なリサーチレポートを作成します。市場調査や業界動向の把握に最適です。",
+        practicalExample: "「日本の生成AI導入動向と、今後3年間で予想されるセキュリティ上の課題について、公開統計や大手各社のIR資料に基づいた総合リサーチレポートを作成してください。」",
+        badge: "リサーチ自動化",
+        icon: "fa-solid fa-magnifying-glass-chart",
+        deepDive: {
+          scenario: "【Before】新規事業の競合調査で半日かけて20本以上の記事や白書を読み漁り、まとめるだけで1日が終わる。\n【After】リサーチテーマを投げると、Geminiが複数の論点を自ら探索・比較した本格的な事前レポートを自動構築。",
+          prompt1: "【産業動向リサーチ】\n「国内製造業における予兆保全IoT×AIの導入事例、参入ベンダー、ROI実績を多角的に調べたレポートをまとめてください。」",
+          prompt2: "【競合比較深掘り】\n「競合A社とB社の直近のIR発表と採用動向から、両社の次期注力領域の違いを分析してください。」",
+          tip: "最初に調査計画（どの観点から調べるか）を提示してくれるため、方向性に齟齬がないか確認してから進められます。"
+        }
       },
 
-      // --- カテゴリ3: Google Workspace ---
+      // CATEGORY 3: WORKSPACE (workspace)
       {
-        id: "ws_1",
-        category: "Google Workspace",
-        categoryColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
-        icon: "sheet",
-        title: "スプレッドシート×AI：関数作成とデータのスマート抽出",
-        summary: "複雑なINDEX/MATCHやREGEXEXTRACTに悩む必要はありません。「A列のメールアドレスからドメイン部分だけを抜き出して重複除外する計算式」を自然言語でAIに作らせることで作業が何倍も速くなります。",
-        practicalPrompt: "「スプレッドシートのB列にある『東京都新宿区西新宿2-8-1』のような住所文字列から、都道府県と市区町村を分離する数式を教えてください。」",
-        actionItem: "手作業で切り貼りしているスプレッドシート処理を数式化する",
-        tags: ["スプレッドシート", "時短術"]
+        id: "ws-1",
+        category: "workspace",
+        categoryName: "Google Workspace 実践",
+        title: "Gmail × Gemini：長文スレッドの要約とスマート返信",
+        subtitle: "サイドパネルの連携で一瞬で返信文を作る",
+        content: "10往復以上ある複雑なメールスレッドでも、右側のGeminiサイドパネルを開いて「このスレッドの決定事項と未解決の宿題をまとめて」と打つだけで要約されます。さらに「丁寧かつ承諾のトーンで返信を作成」と指示すれば即下書きが完成します。",
+        practicalExample: "【GmailのGeminiプロンプト】\n「このスレッドの経緯をふまえ、相手の提案に感謝しつつ、納期の2日延期を申し出る丁寧なビジネスメールの下書きを作成してください。箇条書きで理由も添えて。」",
+        badge: "Gmail効率化",
+        icon: "fa-solid fa-envelope",
+        deepDive: {
+          scenario: "【Before】休暇明けに未読が数十件溜まったスレッドの経緯を1通ずつスクロールして読み直すだけで午前中が消失。\n【After】右サイドパネルをクリックし「決定事項と私の担当ToDoを教えて」で30秒で状況把握＆返信送信完了。",
+          prompt1: "【スレッド要約】\n「ここまでの経緯を、クライアントの要望・弊社の回答・次回ミーティングの議題の3点に整理して。」",
+          prompt2: "【スマート返信作成】\n「相手の来社希望日時に合わせて、会議室の手配と当日の持ち物を案内する返信メールを書いて。」",
+          tip: "Gmailアプリ内サイドパネルはメールの本文全体を最初から認識しているため、メール文をコピペする必要がありません。"
+        }
       },
       {
-        id: "ws_2",
-        category: "Google Workspace",
-        categoryColor: "bg-blue-100 text-blue-900 border-blue-200",
-        icon: "mail",
-        title: "Gmail×AI：トーン調整と超速ドラフト返信術",
-        summary: "Gmail内のGemini「Help me write（執筆サポート）」やプロンプト活用により、箇条書きの荒いメモを失礼のない敬語ビジネスメールへ即時整形できます。「納期を延期したいが角を立てたくない」などトーン指定が鍵です。",
-        practicalPrompt: "「以下の要件で取引先の山田部長宛てに、納期を3日延長してほしい旨のお詫びと相談のメール文面を作ってください。【要件: 現行納期10日、追加検証が必要、変更後納期13日】」",
-        actionItem: "言いにくい依頼メールの丁寧な下書きをAIに作らせる",
-        tags: ["Gmail", "ビジネスメール"]
+        id: "ws-2",
+        category: "workspace",
+        categoryName: "Google Workspace 実践",
+        title: "Google Docs × Gemini：企画書の叩き台を1分で生成",
+        subtitle: "「下書きの作成を手伝って（Help me write）」アイコン",
+        content: "Googleドキュメントの白い紙で悩む必要はありません。「Help me write」アイコン（ペンのマーク）から『新人研修の3日間のカリキュラム企画書を作成して』と打つだけで、見出し、タイムテーブル、目的が含まれたドキュメントが一瞬で立ち上がります。",
+        practicalExample: "「社内の生成AI利用ガイドラインの草案を作成してください。目的、許可される業務範囲、機密情報の取り扱い、禁止事項、報告手順の5つの見出しで構成してください。」",
+        badge: "ドキュメント作成",
+        icon: "fa-solid fa-file-lines",
+        deepDive: {
+          scenario: "【Before】真っ白なDocsを前に構成案や見出しをどう配置するか悩み、書き出すまでに1時間以上フリーズ。\n【After】「Help me write」に要件を1行入れるだけで、標準的な見出し構成・タイムテーブル入りの骨子が1分で出現。",
+          prompt1: "【提案書骨子作成】\n「製造業向けDX研修プログラムの提案書ドラフトを書いて。対象者、ゴール、3日間の講義構成、受講効果の4部構成。」",
+          prompt2: "【文体・トーンブラッシュアップ】\n「選択した文章を、社外の役員層向けに格調高く説得力のあるビジネス文書の言い回しにリライトして。」",
+          tip: "生成されたテキストの一部分だけを範囲選択して「もっと詳しく」「もっと簡潔に」と部分調整も可能です。"
+        }
       },
       {
-        id: "ws_3",
-        category: "Google Workspace",
-        categoryColor: "bg-amber-100 text-amber-900 border-amber-200",
-        icon: "presentation",
-        title: "Googleスライド構成案を5分で完成させる階層プロンプト",
-        summary: "スライド作成で一番時間がかかるのは「構成（スライドごとの見出し・キーメッセージ・箇条書き）」です。プレゼンの目的と聴衆を定義して10枚分のスライド骨子をAIに出力させれば、作成時間は半分以下になります。",
-        practicalPrompt: "「役員向けに『社内AIツール導入計画』を提案する10枚のスライド骨子を作成してください。各スライドごとに【スライド番号・タイトル・コアメッセージ・話す内容の箇条書き3点】を明確に記述してください。」",
-        actionItem: "企画書・スライドの骨子をまずAIに提案させる",
-        tags: ["Googleスライド", "プレゼン"]
+        id: "ws-3",
+        category: "workspace",
+        categoryName: "Google Workspace 実践",
+        title: "スプレッドシート × Gemini：関数作成とデータ整理",
+        subtitle: "複雑なARRAYFORMULAや正規表現も日本語で依頼",
+        content: "スプレッドシートのGeminiは、面倒な関数作成の最強パートナーです。「A列のメールアドレスからドメイン部分だけを抽出し、重複を除外してアルファベット順に並べる数式を教えて」と日本語で説明すれば、最適な数式と使い方の解説が返ってきます。",
+        practicalExample: "「Googleスプレッドシートで、A列の日付が今月であり、かつC列が『完了』となっている行のD列（金額）を合計する関数を書いてください（SUMIFS関数を使った例）。」",
+        badge: "関数・自動化",
+        icon: "fa-solid fa-table-cells",
+        deepDive: {
+          scenario: "【Before】IFやVLOOKUP、FILTERのネストで括弧のエラー（#N/A, #VALUE!）が出てWeb検索に2時間浪費。\n【After】やりたい処理を言葉で伝えるだけで、最新のXLOOKUPやQUERY関数をセル番号付きで完璧に提示。",
+          prompt1: "【条件集計関数】\n「B列の部署名が『営業1課』で、かつF列の受注確度が80%以上の案件のG列売上を合算する数式を書いて。」",
+          prompt2: "【データ整形・抽出】\n「A列の住所文字列から『都道府県名』だけを別列に抜き出すREGEXEXTRACT関数を教えて。」",
+          tip: "「セルA2からA100に入っている」など、具体的なセル番地を伝えるとそのまま貼り付けられる式を生成してくれます。"
+        }
       },
       {
-        id: "ws_4",
-        category: "Google Workspace",
-        categoryColor: "bg-sky-100 text-sky-800 border-sky-200",
-        icon: "file-text",
-        title: "Googleドキュメントでの議事録即時フォーマット術",
-        summary: "Google Meetなどの自動文字起こしデータをGoogleドキュメントに貼り、Geminiに「決定事項」「ToDo（担当・期日付き）」「次回のアジェンダ」に整頓させると、会議直後に完璧な議事録が配布できます。",
-        practicalPrompt: "「以下の会議の会話メモから、1. 決定した事項 2. 各人のToDoと期日 3. 保留となった検討課題 を綺麗にテーブルまたは箇条書きで抽出してください。【会話メモ...】」",
-        actionItem: "次回の会議メモをコピペして整形させてみる",
-        tags: ["Googleドキュメント", "議事録"]
+        id: "ws-4",
+        category: "workspace",
+        categoryName: "Google Workspace 実践",
+        title: "Google スライド × Gemini：構成案とスライド画像生成",
+        subtitle: "アウトラインから独自イメージの挿入まで",
+        content: "スライドでは、Geminiに『新規事業提案の構成案（全6枚）のアジェンダを出して』と依頼して骨組みを作った後、右パネルの「画像を作成」から自社プレゼンのトーンに合わせたオリジナルのイラストや図解イメージを直接スライドに埋め込めます。",
+        practicalExample: "【スライド右パネルの指示】\n「『ハイブリッドワークを推進するIT企業のモダンなオフィスで、チームが笑顔でコラボレーションしている様子』をシンプルで明るいフラットイラストスタイルで生成して。」",
+        badge: "プレゼン作成",
+        icon: "fa-solid fa-file-powerpoint",
+        deepDive: {
+          scenario: "【Before】無料素材サイトを何時間も探しても、プレゼンのテーマや色合いにマッチする画像が見つからない。\n【After】右サイドパネルで「清潔感のあるアイソメトリック風のクラウドサーバー図解」と指定し、スライド専用画像をその場で即生成。",
+          prompt1: "【スライド全体のストーリー構成】\n「役員向けに『社内基幹システム移行計画』を説明するプレゼン（全7枚）の各スライド見出しとキーメッセージを提案して。」",
+          prompt2: "【挿入画像プロンプト】\n「未来のスマートシティを象徴する、柔らかいパステル調のフラットベクターイラスト（背景透過風）。」",
+          tip: "「フラットイラスト」「3Dレンダリング」「写真風」など、タッチの指定を固定すると全体の統一感が出ます。"
+        }
+      },
+      {
+        id: "ws-5",
+        category: "workspace",
+        categoryName: "Google Workspace 実践",
+        title: "Google Drive × Gemini：複数ファイル横断の知恵袋検索",
+        subtitle: "「先月のA社提案書と見積書を探して比較して」が可能に",
+        content: "Googleドライブ内のGemini拡張機能を使うと、散らばった無数のPDF、ドキュメント、スプレッドシートを横断して検索・分析できます。「去年のマーケティング報告書で一番成果が出た施策は何だった？」とチャットするだけで、該当ファイルを特定して回答します。",
+        practicalExample: "「マイドライブ内の『新商品企画』に関するドキュメントとスプレッドシートを参照し、決定したターゲット層と価格設定の推移を一覧表にまとめてください。」",
+        badge: "ファイル横断検索",
+        icon: "fa-brands fa-google-drive",
+        deepDive: {
+          scenario: "【Before】フォルダ階層が深すぎて、どのフォルダに最新版の見積書と契約書があるのか見つからない。\n【After】「ドライブ内の〇〇社関連ファイルから最終合意金額と契約開始日を探して一覧にして」で一発抽出。",
+          prompt1: "【横断比較】\n「ドライブ内の『2025年度予算』と『2026年度予算』のスプレッドシートを比較し、増額幅が最も大きい科目トップ3を挙げて。」",
+          prompt2: "【暗黙知の抽出】\n「過去3年間の新卒採用アンケートファイルから、志望動機として最も多く挙がったキーワードを要約して。」",
+          tip: "ファイル名がうろ覚えでも、文書の中身（本文）を検索対象にしてくれるのが最大のメリットです。"
+        }
       }
     ];
 
-    const APP_STATE = {
-      deliveryTime: "08:00",
-      fontSize: "base", // sm, base, lg, xl
-      streak: 1,
-      lastActiveDate: "",
-      completedIds: new Set(),
-      activeTab: "today", // 'today' or 'archive'
-      todayIndices: [0, 4, 7] // 今日の3つのインデックス (AI, Gemini, Workspace)
+    let currentDayOffset = 0;
+    let currentActiveCategory = 'all';
+    let userState = {
+      completedIds: {},
+      favoriteIds: [],
+      notes: {},
+      scheduledTime: "08:00",
+      enableNotification: false,
+      fontSize: "standard",
+      customGeneratedCards: {}
     };
-
-    // ローカルストレージキー
-    const STORAGE_KEY = "daily_ai_workspace_state_v1";
 
     function loadState() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          APP_STATE.deliveryTime = parsed.deliveryTime || "08:00";
-          APP_STATE.fontSize = parsed.fontSize || "base";
-          APP_STATE.streak = parsed.streak || 1;
-          APP_STATE.lastActiveDate = parsed.lastActiveDate || "";
-          APP_STATE.completedIds = new Set(parsed.completedIds || []);
+        const saved = localStorage.getItem("daily_ai_hub_state_v3");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          userState = Object.assign(userState, parsed);
         }
       } catch (e) {
-        console.error("Failed to load local storage:", e);
+        console.warn("Storage load error:", e);
       }
-
-      // 今日の日付のチェックとストリーク計算
-      const todayStr = getTodayDateString();
-      if (!APP_STATE.lastActiveDate) {
-        APP_STATE.lastActiveDate = todayStr;
-      } else if (APP_STATE.lastActiveDate !== todayStr) {
-        const diffDays = getDaysDifference(APP_STATE.lastActiveDate, todayStr);
-        if (diffDays === 1) {
-          // 連続ログイン
-          APP_STATE.streak += 1;
-        } else if (diffDays > 1) {
-          // 途切れた場合はリセット
-          APP_STATE.streak = 1;
-        }
-        // 日付が変わったら完了フラグをリセット（新しい日）
-        APP_STATE.completedIds.clear();
-        APP_STATE.lastActiveDate = todayStr;
-      }
-
-      // 日付に基づく今日の3つの選出（AI全般、Gemini、Workspaceから1つずつ）
-      selectDailyThree();
-      applyFontSize(APP_STATE.fontSize);
-      saveState();
+      if (!userState.scheduledTime) userState.scheduledTime = "08:00";
+      if (!userState.fontSize) userState.fontSize = "standard";
+      applyFontSize(userState.fontSize);
+      updateScheduleUI();
+      startScheduleTimer();
     }
 
     function saveState() {
       try {
-        const payload = {
-          deliveryTime: APP_STATE.deliveryTime,
-          fontSize: APP_STATE.fontSize,
-          streak: APP_STATE.streak,
-          lastActiveDate: APP_STATE.lastActiveDate,
-          completedIds: Array.from(APP_STATE.completedIds)
-        };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        localStorage.setItem("daily_ai_hub_state_v3", JSON.stringify(userState));
       } catch (e) {
-        console.error("Failed to save state:", e);
+        console.warn("Storage save error:", e);
       }
+      updateScheduleUI();
     }
 
-    function getTodayDateString() {
-      const now = new Date();
-      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    }
+    /* レイアウト幅を崩さずに本文とプロンプトのみを拡大縮小する */
+    function applyFontSize(sizeName) {
+      userState.fontSize = sizeName;
+      document.body.classList.remove('font-standard', 'font-large', 'font-xlarge');
+      document.body.classList.add(`font-${sizeName}`);
 
-    function getDaysDifference(d1Str, d2Str) {
-      const date1 = new Date(d1Str);
-      const date2 = new Date(d2Str);
-      const diffTime = Math.abs(date2 - date1);
-      return Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    }
-
-    // 日付ハッシュを利用して日替わりの3問をバランスよく選出
-    function selectDailyThree() {
-      const today = new Date();
-      const seed = today.getFullYear() * 1000 + (today.getMonth() + 1) * 31 + today.getDate();
-
-      const aiItems = KNOWLEDGE_BANK.filter(k => k.category === "AI全般");
-      const geminiItems = KNOWLEDGE_BANK.filter(k => k.category === "Gemini");
-      const wsItems = KNOWLEDGE_BANK.filter(k => k.category === "Google Workspace");
-
-      const item1 = aiItems[seed % aiItems.length];
-      const item2 = geminiItems[(seed + 1) % geminiItems.length];
-      const item3 = wsItems[(seed + 2) % wsItems.length];
-
-      APP_STATE.todayItems = [item1, item2, item3];
-    }
-
-    const FONT_SIZE_LABELS = {
-      sm: "小さめ",
-      base: "標準",
-      lg: "大きめ",
-      xl: "特大"
-    };
-
-    const FONT_SIZE_SEQUENCE = ["sm", "base", "lg", "xl"];
-
-    function applyFontSize(sizeKey) {
-      const mainContainer = document.getElementById("cardsContainer");
-      if (mainContainer) {
-        mainContainer.classList.remove("content-size-sm", "content-size-base", "content-size-lg", "content-size-xl");
-        mainContainer.classList.add(`content-size-${sizeKey}`);
-      }
-
-      APP_STATE.fontSize = sizeKey;
-      const badge = document.getElementById("currentFontSizeBadge");
-      if (badge) {
-        badge.textContent = FONT_SIZE_LABELS[sizeKey] || "標準";
-      }
-
-      // 設定モーダル内の選択ボタンスタイル更新
-      document.querySelectorAll(".font-size-btn").forEach(btn => {
-        const btnSize = btn.getAttribute("data-size");
-        if (btnSize === sizeKey) {
-          btn.classList.add("border-blue-600", "bg-blue-50/70", "ring-2", "ring-blue-500/20");
-          btn.classList.remove("border-slate-200", "bg-white");
-        } else {
-          btn.classList.remove("border-blue-600", "bg-blue-50/70", "ring-2", "ring-blue-500/20");
-          btn.classList.add("border-slate-200", "bg-white");
-        }
-      });
-
+      const labelMap = { 'standard': '標準', 'large': '大', 'xlarge': '特大' };
+      const disp = document.getElementById("fontSizeDisplay");
+      if (disp) disp.innerText = labelMap[sizeName] || '大';
       saveState();
     }
 
-    function renderApp() {
-      // 日付テキスト
-      const dateText = document.getElementById("headerDateText");
-      const now = new Date();
+    function cycleFontSize() {
+      const sizes = ['standard', 'large', 'xlarge'];
+      let nextIdx = (sizes.indexOf(userState.fontSize) + 1) % sizes.length;
+      applyFontSize(sizes[nextIdx]);
+      showToast(`文字サイズ: ${sizes[nextIdx] === 'standard' ? '標準' : sizes[nextIdx] === 'large' ? '大' : '特大'} に変更しました`, "info");
+    }
+
+    function updateScheduleUI() {
+      const navDisp = document.getElementById("navTimeDisplay");
+      if (navDisp) navDisp.innerText = userState.scheduledTime;
+    }
+
+    function getCalculatedDate(offset = 0) {
+      const d = new Date();
+      d.setDate(d.getDate() + offset);
+      return d;
+    }
+
+    function getCalculatedDateString(offset = 0) {
+      const d = getCalculatedDate(offset);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function getDailyItems(offset) {
+      const dateKey = getCalculatedDateString(offset);
+      if (userState.customGeneratedCards && userState.customGeneratedCards[dateKey]) {
+        return userState.customGeneratedCards[dateKey];
+      }
+
+      const targetDate = getCalculatedDate(offset);
+      const y = targetDate.getFullYear();
+      const m = targetDate.getMonth() + 1;
+      const d = targetDate.getDate();
+      const seed = Math.abs(y * 365 + m * 31 + d);
+
+      const aiList = KNOWLEDGE_BASE.filter(k => k.category === 'ai');
+      const geminiList = KNOWLEDGE_BASE.filter(k => k.category === 'gemini');
+      const wsList = KNOWLEDGE_BASE.filter(k => k.category === 'workspace');
+
+      const selectedAi = aiList[seed % aiList.length];
+      const selectedGemini = geminiList[(seed + 1) % geminiList.length];
+      const selectedWs = wsList[(seed + 2) % wsList.length];
+
+      return [selectedAi, selectedGemini, selectedWs];
+    }
+
+    function renderDailyView() {
+      const targetDate = getCalculatedDate(currentDayOffset);
       const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
-      dateText.textContent = now.toLocaleDateString('ja-JP', options);
+      const dateDisplay = targetDate.toLocaleDateString('ja-JP', options);
+      const dateKey = getCalculatedDateString(currentDayOffset);
 
-      // 配信時間表示
-      document.getElementById("deliveryTimeDisplay").textContent = APP_STATE.deliveryTime;
-      document.querySelectorAll(".deliveryTimeEcho").forEach(el => {
-        el.textContent = APP_STATE.deliveryTime;
-      });
+      const dateEl = document.getElementById("currentDateDisplay");
+      if (dateEl) dateEl.innerText = dateDisplay;
 
-      // 継続ストリーク
-      document.getElementById("streakCount").textContent = APP_STATE.streak;
+      const topicSeedEl = document.getElementById("dayTopicSeed");
+      if (topicSeedEl) {
+        topicSeedEl.innerText = currentDayOffset === 0 
+          ? "本日の厳選3トピック" 
+          : (currentDayOffset < 0 ? `${Math.abs(currentDayOffset)}日前のトピック` : `${currentDayOffset}日後のトピック`);
+      }
 
-      // カード一覧の描画
-      const container = document.getElementById("cardsContainer");
-      container.className = `space-y-4 content-size-${APP_STATE.fontSize}`;
+      const items = getDailyItems(currentDayOffset);
+      const container = document.getElementById("cardsGrid");
+      if (!container) return;
       container.innerHTML = "";
 
-      const itemsToRender = (APP_STATE.activeTab === "today") 
-        ? APP_STATE.todayItems 
-        : KNOWLEDGE_BANK;
+      const completedToday = userState.completedIds[dateKey] || [];
 
-      itemsToRender.forEach((item, index) => {
-        const isCompleted = APP_STATE.completedIds.has(item.id);
+      items.forEach((item) => {
+        const isDone = completedToday.includes(item.id);
+        const isFav = userState.favoriteIds.includes(item.id);
+        const note = userState.notes[item.id] || "";
+
+        let badgeStyle = "bg-blue-50 text-googleBlue border-blue-200";
+        if (item.category === 'gemini') {
+          badgeStyle = "bg-purple-50 text-geminiPurple border-purple-200";
+        } else if (item.category === 'workspace') {
+          badgeStyle = "bg-emerald-50 text-googleGreen border-emerald-200";
+        }
+
         const card = document.createElement("div");
-        card.className = `card-hover-effect bg-white rounded-2xl p-4 sm:p-6 border transition-all ${
-          isCompleted 
-            ? "border-emerald-300 bg-emerald-50/20 shadow-xs" 
-            : "border-slate-200 shadow-xs hover:border-blue-200"
+        card.className = `glass-card rounded-2xl p-4 sm:p-5 border transition flex flex-col justify-between shadow-xs w-full box-border min-w-0 ${
+          isDone ? 'border-emerald-300 bg-emerald-50/20 ring-1 ring-emerald-200' : 'border-slate-200 hover:border-slate-300'
         }`;
 
         card.innerHTML = `
-          <div class="flex flex-col gap-3">
-            <div class="space-y-2.5">
-              <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${item.categoryColor}">
-                  ${item.category}
-                </span>
-                <span class="text-[11px] text-slate-400 font-medium flex items-center gap-1">
-                  <i data-lucide="book-open" class="w-3 h-3"></i> 知識 #${index + 1}
-                </span>
-                ${item.tags ? item.tags.map(t => `<span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">#${t}</span>`).join('') : ''}
-              </div>
-
-              <h3 class="card-title font-bold text-slate-900 leading-snug tracking-tight">
-                ${item.title}
-              </h3>
-
-              <p class="card-body text-slate-600 leading-relaxed">
-                ${item.summary}
-              </p>
-
-              <!-- 実践プロンプト / 活用例ボックス -->
-              <div class="bg-slate-50/90 border border-slate-200/90 rounded-xl p-3 sm:p-3.5 space-y-2 mt-2">
-                <div class="flex items-center justify-between text-xs">
-                  <span class="font-bold text-slate-700 flex items-center gap-1.5 text-[11px] sm:text-xs">
-                    <i data-lucide="terminal" class="w-3.5 h-3.5 text-blue-600"></i>
-                    今日すぐ使えるプロンプト / コツ
-                  </span>
-                  <button onclick="copyPrompt('${encodeURIComponent(item.practicalPrompt)}')" class="text-blue-600 hover:text-blue-800 text-[11px] sm:text-xs font-semibold flex items-center gap-1 active:scale-95 transition">
-                    <i data-lucide="copy" class="w-3 h-3"></i> コピー
-                  </button>
-                </div>
-                <pre class="card-prompt bg-white p-2.5 rounded-lg border border-slate-200 font-mono text-slate-700 whitespace-pre-wrap break-words leading-relaxed">${escapeHtml(item.practicalPrompt)}</pre>
-                <div class="flex items-center gap-1.5 text-[11px] sm:text-xs text-slate-500 font-medium pt-0.5">
-                  <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i>
-                  <span><strong>アクション目標:</strong> ${item.actionItem}</span>
-                </div>
+          <div class="min-w-0">
+            <!-- Category & Actions -->
+            <div class="flex items-center justify-between gap-1 mb-2.5">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold border ${badgeStyle}">
+                <i class="${item.icon}"></i>
+                <span>${item.categoryName}</span>
+              </span>
+              <div class="flex items-center gap-0.5">
+                <button onclick="toggleFavorite('${item.id}')" class="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:text-amber-500 transition" title="お気に入り">
+                  <i class="${isFav ? 'fa-solid text-amber-500' : 'fa-regular'} fa-star text-xs"></i>
+                </button>
+                <button onclick="speakText('${encodeURIComponent(item.title + '。' + item.content)}')" class="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:text-googleBlue transition" title="音声で聴く">
+                  <i class="fa-solid fa-volume-high text-xs"></i>
+                </button>
               </div>
             </div>
 
-            <!-- 下部アクション: 完了トグル & AI深掘りボタン（スマホでも綺麗に横並び） -->
-            <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100 shrink-0">
-              <button onclick="toggleKnowledgeComplete('${item.id}')" class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition active:scale-95 ${
-                isCompleted 
-                  ? "bg-emerald-600 text-white shadow-xs hover:bg-emerald-700" 
-                  : "bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300"
-              }">
-                <i data-lucide="${isCompleted ? 'check-check' : 'circle'}" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
-                <span>${isCompleted ? '理解した！' : '完了にする'}</span>
-              </button>
+            <!-- Title & Subtitle -->
+            <div class="space-y-1 mb-2.5 min-w-0">
+              <span class="text-[10px] font-bold text-slate-400 tracking-wider uppercase">${item.badge}</span>
+              <h3 class="card-title font-extrabold text-slate-900 leading-snug cursor-pointer hover:text-googleBlue transition" onclick="openDeepDiveModal('${item.id}')">
+                ${item.title}
+              </h3>
+              <p class="text-xs font-medium text-slate-500">${item.subtitle}</p>
+            </div>
 
-              <button onclick="askGeminiDeepDive('${item.id}')" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-purple-700 hover:bg-purple-50 flex items-center gap-1 transition">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-600"></i>
-                <span>Geminiで深掘り</span>
+            <!-- Main Content -->
+            <p class="reading-content text-slate-700 mb-3">
+              ${item.content}
+            </p>
+
+            <!-- Practical Example Box -->
+            <div class="bg-slate-100/90 rounded-xl p-2.5 sm:p-3 border border-slate-200 space-y-1.5 mb-3 w-full box-border min-w-0">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+                <span class="flex items-center gap-1.5">
+                  <i class="fa-solid fa-terminal text-googleBlue text-xs"></i>
+                  実践プロンプト
+                </span>
+                <button onclick="copyToClipboard('${escapeJsString(item.practicalExample)}')" class="text-googleBlue hover:underline flex items-center gap-1 text-xs font-bold">
+                  <i class="fa-regular fa-copy"></i>
+                  コピー
+                </button>
+              </div>
+              <p class="prompt-box text-slate-800 bg-white p-2.5 rounded-lg border border-slate-200 font-mono whitespace-pre-wrap select-all max-h-36 overflow-y-auto custom-scrollbar w-full box-border">
+${item.practicalExample}
+              </p>
+            </div>
+
+            <!-- Saved Note if any -->
+            ${note ? `
+              <div class="bg-amber-50 border border-amber-200 rounded-lg p-2.5 mb-3 text-xs text-amber-900 flex items-start gap-2">
+                <i class="fa-solid fa-pen-nib text-amber-600 mt-0.5"></i>
+                <div class="flex-1 min-w-0"><span class="font-bold">メモ:</span> ${note}</div>
+              </div>
+            ` : ''}
+          </div>
+
+          <!-- Bottom Card Buttons -->
+          <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-1.5 mt-2">
+            <button onclick="openNoteModal('${item.id}')" class="px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-semibold flex items-center gap-1 transition shrink-0">
+              <i class="fa-regular fa-pen-to-square"></i>
+              <span>${note ? 'メモ編集' : 'メモ'}</span>
+            </button>
+            <div class="flex items-center gap-1.5">
+              <button onclick="openDeepDiveModal('${item.id}')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition flex items-center gap-1">
+                <i class="fa-solid fa-sparkles text-purple-600 text-xs"></i>
+                <span>深掘り</span>
+              </button>
+              <button onclick="toggleCardDone('${item.id}', '${dateKey}')" class="px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 ${
+                isDone 
+                  ? 'bg-emerald-600 text-white shadow-xs hover:bg-emerald-700' 
+                  : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
+              }">
+                <i class="fa-solid ${isDone ? 'fa-check' : 'fa-circle-check text-slate-400'}"></i>
+                <span>${isDone ? '読了済' : '読んだ'}</span>
               </button>
             </div>
           </div>
@@ -786,387 +856,748 @@
         container.appendChild(card);
       });
 
-      // アイコンの再初期化
-      lucide.createIcons();
-
-      // 進捗状況バッジと完了バナーの更新
-      updateProgressDisplay();
+      updateProgressCounter();
     }
 
-    function updateProgressDisplay() {
-      const todayTotal = APP_STATE.todayItems.length;
-      let completedCount = 0;
-      APP_STATE.todayItems.forEach(item => {
-        if (APP_STATE.completedIds.has(item.id)) completedCount++;
-      });
-
-      const badge = document.getElementById("todayProgressBadge");
-      const banner = document.getElementById("allCompleteBanner");
-
-      if (completedCount === todayTotal) {
-        badge.className = "inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-emerald-600 text-white";
-        badge.textContent = `本日分完了！ (${completedCount} / ${todayTotal})`;
-        if (APP_STATE.activeTab === "today") {
-          banner.classList.remove("hidden");
-        }
-      } else {
-        badge.className = "inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200";
-        badge.textContent = `学習中 (${completedCount} / ${todayTotal})`;
-        banner.classList.add("hidden");
+    function toggleCardDone(cardId, dateKey) {
+      if (!userState.completedIds[dateKey]) {
+        userState.completedIds[dateKey] = [];
       }
-    }
-
-    function toggleKnowledgeComplete(id) {
-      if (APP_STATE.completedIds.has(id)) {
-        APP_STATE.completedIds.delete(id);
-        showToast("未完了に戻しました");
+      const list = userState.completedIds[dateKey];
+      const idx = list.indexOf(cardId);
+      if (idx > -1) {
+        list.splice(idx, 1);
+        showToast("未完了に戻しました", "info");
       } else {
-        APP_STATE.completedIds.add(id);
-        showToast("🎉 学習完了としてマークしました！");
+        list.push(cardId);
+        showToast("ナレッジを1つ完了しました！🎉", "success");
       }
       saveState();
-      renderApp();
+      renderDailyView();
     }
 
-    function copyPrompt(encodedText) {
-      const text = decodeURIComponent(encodedText);
-      const tempInput = document.createElement("textarea");
-      tempInput.value = text;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      try {
-        document.execCommand("copy");
-        showToast("📋 プロンプトをクリップボードにコピーしました！");
-      } catch (err) {
-        showToast("コピーに失敗しました。手動でコピーしてください");
+    function markAllCompletedToday() {
+      const dateKey = getCalculatedDateString(currentDayOffset);
+      const items = getDailyItems(currentDayOffset);
+      userState.completedIds[dateKey] = items.map(i => i.id);
+      saveState();
+      renderDailyView();
+      showToast("今日の3つのナレッジをすべて完了しました！お疲れ様でした👏", "success");
+    }
+
+    function updateProgressCounter() {
+      const dateKey = getCalculatedDateString(currentDayOffset);
+      const completedToday = userState.completedIds[dateKey] || [];
+      const count = Math.min(completedToday.length, 3);
+      const textEl = document.getElementById("completedCountText");
+      if (textEl) {
+        textEl.innerText = `今日の達成度: ${count} / 3 完了`;
       }
-      document.body.removeChild(tempInput);
     }
 
-    function escapeHtml(str) {
-      return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    function toggleFavorite(cardId) {
+      const idx = userState.favoriteIds.indexOf(cardId);
+      if (idx > -1) {
+        userState.favoriteIds.splice(idx, 1);
+        showToast("お気に入りから解除しました", "info");
+      } else {
+        userState.favoriteIds.push(cardId);
+        showToast("お気に入りに追加しました⭐", "success");
+      }
+      saveState();
+      renderDailyView();
+      renderArchiveView();
     }
 
-    let toastTimeout = null;
-    function showToast(message, isSuccess = true) {
-      const toast = document.getElementById("toast");
-      const msgEl = document.getElementById("toastMessage");
-      const iconEl = document.getElementById("toastIcon");
-
-      msgEl.textContent = message;
-      clearTimeout(toastTimeout);
-
-      toast.classList.remove("translate-y-20", "opacity-0");
-      toast.classList.add("translate-y-0", "opacity-100");
-
-      toastTimeout = setTimeout(() => {
-        toast.classList.remove("translate-y-0", "opacity-100");
-        toast.classList.add("translate-y-20", "opacity-0");
-      }, 3000);
+    function changeDayOffset(delta) {
+      currentDayOffset += delta;
+      renderDailyView();
     }
 
-    async function askGeminiDeepDive(knowledgeId) {
-      const item = KNOWLEDGE_BANK.find(k => k.id === knowledgeId);
-      if (!item) return;
+    function resetToToday() {
+      currentDayOffset = 0;
+      renderDailyView();
+    }
 
-      const modal = document.getElementById("aiDetailModal");
-      const titleEl = document.getElementById("aiModalTitle");
-      const catEl = document.getElementById("aiModalCategory");
-      const contentEl = document.getElementById("aiModalContent");
+    function switchView(viewName) {
+      const todayView = document.getElementById("todayView");
+      const archiveView = document.getElementById("archiveView");
+      const btnToday = document.getElementById("btnViewToday");
+      const btnArchive = document.getElementById("btnViewArchive");
 
-      titleEl.textContent = `${item.title} の深掘り解説`;
-      catEl.textContent = `${item.category} • Gemini 3 Flash が生成中`;
-      contentEl.innerHTML = `
-        <div class="py-10 text-center space-y-3">
-          <div class="inline-block animate-spin text-purple-600">
-            <i data-lucide="loader-2" class="w-8 h-8"></i>
+      if (viewName === 'today') {
+        todayView.classList.remove("hidden");
+        archiveView.classList.add("hidden");
+        btnToday.className = "px-2 sm:px-2.5 py-1 font-bold rounded-lg bg-white text-slate-900 shadow-xs transition whitespace-nowrap text-xs";
+        btnArchive.className = "px-2 sm:px-2.5 py-1 font-bold rounded-lg text-slate-500 hover:text-slate-800 transition whitespace-nowrap text-xs";
+        renderDailyView();
+      } else {
+        todayView.classList.add("hidden");
+        archiveView.classList.remove("hidden");
+        btnToday.className = "px-2 sm:px-2.5 py-1 font-bold rounded-lg text-slate-500 hover:text-slate-800 transition whitespace-nowrap text-xs";
+        btnArchive.className = "px-2 sm:px-2.5 py-1 font-bold rounded-lg bg-white text-slate-900 shadow-xs transition whitespace-nowrap text-xs";
+        renderArchiveView();
+      }
+    }
+
+    function openScheduleModal() {
+      document.getElementById("scheduleTimeInput").value = userState.scheduledTime || "08:00";
+      document.getElementById("notificationCheckbox").checked = !!userState.enableNotification;
+      document.getElementById("scheduleModal").classList.remove("hidden");
+    }
+
+    async function saveScheduleSettings() {
+      const val = document.getElementById("scheduleTimeInput").value;
+      if (val) userState.scheduledTime = val;
+      const notifWanted = document.getElementById("notificationCheckbox").checked;
+      userState.enableNotification = notifWanted;
+
+      if (notifWanted && ("Notification" in window)) {
+        if (Notification.permission !== "granted") {
+          const perm = await Notification.requestPermission();
+          if (perm !== "granted") {
+            showToast("通知がブロックされているため通知は鳴りません", "info");
+            userState.enableNotification = false;
+          }
+        }
+      }
+
+      saveState();
+      closeModal("scheduleModal");
+      showToast(`毎日 ${userState.scheduledTime} の配信設定を保存しました⏰`, "success");
+      renderDailyView();
+    }
+
+    let timerInterval = null;
+    let lastNotifiedDay = "";
+    function startScheduleTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const currentTimeStr = `${hours}:${mins}`;
+        const todayStr = getCalculatedDateString(0);
+
+        if (currentTimeStr === userState.scheduledTime && lastNotifiedDay !== todayStr) {
+          lastNotifiedDay = todayStr;
+          if (userState.enableNotification && ("Notification" in window) && Notification.permission === "granted") {
+            try {
+              new Notification("Daily AI Hub", {
+                body: `⏰ 指定時刻 (${userState.scheduledTime}) になりました！今日の3つのAIナレッジを学びましょう。`
+              });
+            } catch (e) {}
+          }
+          showToast(`⏰ 指定時刻 (${userState.scheduledTime}) の最新AIナレッジです`, "info");
+          renderDailyView();
+        }
+      }, 30000);
+    }
+
+    let currentNoteTargetId = null;
+    function openNoteModal(cardId) {
+      currentNoteTargetId = cardId;
+      const item = KNOWLEDGE_BASE.find(k => k.id === cardId) ||
+                   (userState.customGeneratedCards[getCalculatedDateString(currentDayOffset)] || []).find(k => k.id === cardId);
+      document.getElementById("noteCardTitle").innerText = item ? item.title : "";
+      document.getElementById("noteInput").value = userState.notes[cardId] || "";
+      document.getElementById("noteModal").classList.remove("hidden");
+    }
+
+    function saveNote() {
+      if (currentNoteTargetId) {
+        const text = document.getElementById("noteInput").value.trim();
+        if (text) {
+          userState.notes[currentNoteTargetId] = text;
+        } else {
+          delete userState.notes[currentNoteTargetId];
+        }
+        saveState();
+        closeModal("noteModal");
+        renderDailyView();
+        showToast("メモを保存しました📝", "success");
+      }
+    }
+
+    function setArchiveCategory(cat) {
+      currentActiveCategory = cat;
+      document.querySelectorAll(".cat-pill").forEach(pill => {
+        if (pill.getAttribute("data-cat") === cat) {
+          pill.className = "cat-pill px-3 py-1.5 rounded-full font-bold transition bg-slate-900 text-white";
+        } else {
+          pill.className = "cat-pill px-3 py-1.5 rounded-full font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200";
+        }
+      });
+      renderArchiveView();
+    }
+
+    function filterArchive() {
+      renderArchiveView();
+    }
+
+    function renderArchiveView() {
+      const container = document.getElementById("archiveGrid");
+      if (!container) return;
+
+      document.getElementById("countAll").innerText = KNOWLEDGE_BASE.length;
+      document.getElementById("countAi").innerText = KNOWLEDGE_BASE.filter(k => k.category === 'ai').length;
+      document.getElementById("countGemini").innerText = KNOWLEDGE_BASE.filter(k => k.category === 'gemini').length;
+      document.getElementById("countWorkspace").innerText = KNOWLEDGE_BASE.filter(k => k.category === 'workspace').length;
+      document.getElementById("countFav").innerText = userState.favoriteIds.length;
+
+      const keyword = (document.getElementById("archiveSearchInput")?.value || "").trim().toLowerCase();
+      let list = KNOWLEDGE_BASE;
+
+      if (currentActiveCategory === 'favorites') {
+        list = list.filter(k => userState.favoriteIds.includes(k.id));
+      } else if (currentActiveCategory !== 'all') {
+        list = list.filter(k => k.category === currentActiveCategory);
+      }
+
+      if (keyword) {
+        list = list.filter(k => 
+          k.title.toLowerCase().includes(keyword) ||
+          k.subtitle.toLowerCase().includes(keyword) ||
+          k.content.toLowerCase().includes(keyword) ||
+          k.practicalExample.toLowerCase().includes(keyword)
+        );
+      }
+
+      container.innerHTML = "";
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-400">
+            <i class="fa-regular fa-folder-open text-2xl mb-1"></i>
+            <p class="text-xs">該当するナレッジが見つかりませんでした。</p>
           </div>
-          <p class="text-slate-500 font-medium">Geminiに実務活用アイデアと詳細解説を問い合わせています...</p>
+        `;
+        return;
+      }
+
+      list.forEach(item => {
+        const isFav = userState.favoriteIds.includes(item.id);
+        const card = document.createElement("div");
+        card.className = "bg-white rounded-xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between text-xs mb-1.5">
+              <span class="font-bold text-slate-400 text-[11px]">${item.categoryName}</span>
+              <button onclick="toggleFavorite('${item.id}')" class="text-slate-400 hover:text-amber-500">
+                <i class="${isFav ? 'fa-solid text-amber-500' : 'fa-regular'} fa-star"></i>
+              </button>
+            </div>
+            <h4 class="font-bold text-slate-900 text-sm mb-1 hover:text-googleBlue cursor-pointer" onclick="openDeepDiveModal('${item.id}')">${item.title}</h4>
+            <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-2">${item.content}</p>
+          </div>
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+            <button onclick="copyToClipboard('${escapeJsString(item.practicalExample)}')" class="text-xs text-googleBlue font-bold hover:underline flex items-center gap-1">
+              <i class="fa-regular fa-copy"></i> コピー
+            </button>
+            <button onclick="openDeepDiveModal('${item.id}')" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+              深掘り
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    const geminiApiKey = "";
+    const geminiApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${geminiApiKey}`;
+
+    async function callGemini(promptText, systemInstructionText) {
+      const payload = {
+        contents: [{ parts: [{ text: promptText }] }],
+        systemInstruction: {
+          parts: [{ text: systemInstructionText || "あなたはGoogle WorkspaceとGeminiの実務活用コンサルタントです。日本のビジネスパーソンに向けて、実用的で具体的、かつ丁寧な日本語で解説してください。マークダウン形式で見出しや箇条書きを使い、読みやすく構成してください。" }]
+        }
+      };
+
+      let delay = 1000;
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const res = await fetch(geminiApiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            const data = await res.json();
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text && text.trim().length > 0) {
+              return text;
+            }
+          }
+        } catch (e) {
+          console.warn("Fetch attempt failed:", e);
+        }
+        await new Promise(r => setTimeout(r, delay));
+        delay *= 1.5;
+      }
+      return null;
+    }
+
+    function formatMarkdown(text) {
+      return text
+        .replace(/^### (.*$)/gim, '<h4 class="font-bold text-slate-900 text-sm mt-3 mb-1">$1</h4>')
+        .replace(/^## (.*$)/gim, '<h3 class="font-bold text-slate-900 text-sm sm:text-base mt-3 mb-1.5 pb-1 border-b border-slate-200">$1</h3>')
+        .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-bold text-slate-900">$1</strong>')
+        .replace(/`([^`]+)`/gim, '<code class="bg-slate-100 text-googleBlue px-1.5 py-0.5 rounded text-xs font-mono">$1</code>')
+        .replace(/^\* (.*$)/gim, '<li class="ml-4 list-disc text-slate-700 text-xs sm:text-sm my-0.5">$1</li>')
+        .replace(/^\- (.*$)/gim, '<li class="ml-4 list-disc text-slate-700 text-xs sm:text-sm my-0.5">$1</li>')
+        .replace(/\n{2,}/g, '<br><br>');
+    }
+
+    let activeModalCardId = null;
+
+    function renderBaseDeepDive(item) {
+      const dd = item.deepDive || {
+        scenario: `【Before】従来のやり方では手作業が多く確認漏れや時間ロスが発生。\n【After】「${item.title}」を導入することで、作業時間が劇的に短縮され、品質・正確性が安定。`,
+        prompt1: `【業務適用プロンプト1】\n「${item.title}の観点を取り入れ、入力文の改善点を3つのステップで提示してください。」`,
+        prompt2: `【応用プロンプト2】\n「前提条件が足りない場合は推測で進めず、確認事項を箇条書きで逆質問してください。」`,
+        tip: "まずは日常のちょっとした定型業務（メール返信や要約）から試すのが定着の近道です。"
+      };
+
+      return `
+        <div class="space-y-4">
+          <!-- Overview Box -->
+          <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3.5 text-xs text-blue-900 space-y-1">
+            <div class="font-bold flex items-center gap-1.5 text-googleBlue">
+              <i class="fa-solid fa-compass"></i>
+              <span>概要とポイント</span>
+            </div>
+            <p class="leading-relaxed text-slate-700">${item.content}</p>
+          </div>
+
+          <!-- Scenario (Before/After) -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-xs space-y-2">
+            <h4 class="font-bold text-slate-900 text-xs flex items-center gap-1.5 text-indigo-700">
+              <i class="fa-solid fa-arrows-split-up-and-left"></i>
+              <span>実務での活用シナリオ（Before / After）</span>
+            </h4>
+            <div class="text-xs text-slate-700 whitespace-pre-wrap leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100 font-sans">
+${dd.scenario}
+            </div>
+          </div>
+
+          <!-- Actionable Prompts -->
+          <div class="space-y-2.5">
+            <h4 class="font-bold text-slate-900 text-xs flex items-center gap-1.5 text-emerald-700">
+              <i class="fa-solid fa-terminal"></i>
+              <span>今日から使える応用プロンプト（2選）</span>
+            </h4>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-1.5">
+              <div class="flex items-center justify-between text-[11px] font-bold text-slate-600">
+                <span>応用例 1</span>
+                <button onclick="copyToClipboard('${escapeJsString(dd.prompt1)}')" class="text-googleBlue hover:underline flex items-center gap-1">
+                  <i class="fa-regular fa-copy"></i> コピー
+                </button>
+              </div>
+              <pre class="prompt-box text-slate-800 bg-white p-2.5 rounded-lg border border-slate-200 font-mono whitespace-pre-wrap text-xs select-all">${dd.prompt1}</pre>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-1.5">
+              <div class="flex items-center justify-between text-[11px] font-bold text-slate-600">
+                <span>応用例 2</span>
+                <button onclick="copyToClipboard('${escapeJsString(dd.prompt2)}')" class="text-googleBlue hover:underline flex items-center gap-1">
+                  <i class="fa-regular fa-copy"></i> コピー
+                </button>
+              </div>
+              <pre class="prompt-box text-slate-800 bg-white p-2.5 rounded-lg border border-slate-200 font-mono whitespace-pre-wrap text-xs select-all">${dd.prompt2}</pre>
+            </div>
+          </div>
+
+          <!-- Practical Tip -->
+          <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex items-start gap-2">
+            <i class="fa-solid fa-lightbulb text-amber-600 mt-0.5 text-xs"></i>
+            <div>
+              <span class="font-bold">ワンポイントアドバイス:</span>
+              <span class="text-slate-700 ml-1 leading-relaxed">${dd.tip}</span>
+            </div>
+          </div>
+
+          <!-- Live AI Insights Container -->
+          <div id="aiLiveContainer" class="pt-2 border-t border-slate-200">
+            <div id="aiLiveLoading" class="flex items-center gap-2 text-xs text-slate-500 py-1">
+              <i class="fa-solid fa-circle-notch fa-spin text-purple-600"></i>
+              <span>Gemini 3 Flash で本日の最新アドバイスを取得中...</span>
+            </div>
+            <div id="aiLiveContent" class="hidden space-y-2 mt-2"></div>
+          </div>
         </div>
       `;
-      lucide.createIcons();
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
+    }
 
-      const prompt = `あなたはAI・Google Workspaceの専門コンサルタントです。
-以下のテーマについて、実務で今すぐ活かせるより具体的なステップと注意点、応用例を初心者にもわかりやすく丁寧に解説してください。
+    async function openDeepDiveModal(cardId) {
+      activeModalCardId = cardId;
+      const item = KNOWLEDGE_BASE.find(k => k.id === cardId) || 
+                   (userState.customGeneratedCards[getCalculatedDateString(currentDayOffset)] || []).find(k => k.id === cardId);
+      if (!item) return;
 
-【テーマ】: ${item.title}
-【カテゴリ】: ${item.category}
-【概要】: ${item.summary}
-【プロンプト例】: ${item.practicalPrompt}
+      document.getElementById("aiModalTitle").innerText = `${item.title} の深掘り解説`;
+      document.getElementById("aiModalSubtitle").innerText = `${item.categoryName} • 実務シナリオと応用プロンプト`;
+      
+      const retryBtn = document.getElementById("aiModalRetryBtn");
+      if (retryBtn) retryBtn.classList.add("hidden");
+      const statusText = document.getElementById("aiModalFooterStatus");
+      if (statusText) statusText.innerText = "実務解説ガイド";
 
-回答構成:
-1. なぜこれが今重要なのか？（1〜2行）
-2. 業務での具体的な活用シーン3選（箇条書き）
-3. よくある失敗と回避テクニック
-4. 今日試せるネクストステップ`;
+      // 即座に完全な実務解説コンテンツを表示
+      const modalBody = document.getElementById("aiModalBody");
+      modalBody.innerHTML = renderBaseDeepDive(item);
+      document.getElementById("aiModal").classList.remove("hidden");
+
+      // バックグラウンドでGeminiによる最新アドバイスを取得
+      const prompt = `以下のトピックについて、実際の日本のオフィスワークでの具体的な実践アドバイスや、よくある失敗例とその回避策を箇条書きで簡潔に解説してください。\n\n【トピック】${item.title}\n【概要】${item.content}\n【カテゴリ】${item.categoryName}`;
+      
+      try {
+        const response = await callGemini(prompt);
+        const liveLoading = document.getElementById("aiLiveLoading");
+        const liveContent = document.getElementById("aiLiveContent");
+
+        if (response && liveContent) {
+          if (liveLoading) liveLoading.classList.add("hidden");
+          liveContent.classList.remove("hidden");
+          liveContent.innerHTML = `
+            <div class="bg-purple-50/70 border border-purple-200 rounded-xl p-3.5 space-y-2">
+              <div class="flex items-center gap-1.5 text-xs font-bold text-purple-900">
+                <i class="fa-solid fa-wand-magic-sparkles text-purple-600"></i>
+                <span>Gemini 3 Flash による最新プラスαアドバイス</span>
+              </div>
+              <div class="text-xs text-slate-700 leading-relaxed space-y-1">
+                ${formatMarkdown(response)}
+              </div>
+            </div>
+          `;
+          if (statusText) statusText.innerText = "Gemini 最新アドバイス連動中";
+        } else {
+          if (liveLoading) {
+            liveLoading.innerHTML = `<span class="text-[11px] text-slate-400">※基本解説モードで表示中</span>`;
+          }
+          if (retryBtn) retryBtn.classList.remove("hidden");
+        }
+      } catch (err) {
+        const liveLoading = document.getElementById("aiLiveLoading");
+        if (liveLoading) {
+          liveLoading.innerHTML = `<span class="text-[11px] text-slate-400">※基本解説モードで表示中</span>`;
+        }
+        if (retryBtn) retryBtn.classList.remove("hidden");
+      }
+    }
+
+    function retryDeepDive() {
+      if (activeModalCardId) {
+        openDeepDiveModal(activeModalCardId);
+      }
+    }
+
+    async function askGeminiForWorkPlan() {
+      const items = getDailyItems(currentDayOffset);
+      const summaryList = items.map(i => `・【${i.categoryName}】${i.title}`).join('\n');
+
+      document.getElementById("aiModalTitle").innerText = "今日の3知識を活かした実務アクションプラン";
+      document.getElementById("aiModalSubtitle").innerText = "3つの要素を連動させて1日の生産性を高める提案";
+      
+      const retryBtn = document.getElementById("aiModalRetryBtn");
+      if (retryBtn) retryBtn.classList.add("hidden");
+
+      document.getElementById("aiModalBody").innerHTML = `
+        <div class="space-y-3.5">
+          <div class="bg-blue-50/80 border border-blue-200 rounded-xl p-3.5 text-xs text-blue-900">
+            <h4 class="font-bold flex items-center gap-1.5 mb-1 text-googleBlue">
+              <i class="fa-solid fa-calendar-check"></i>
+              <span>本日の厳選3トピック連動フロー</span>
+            </h4>
+            <div class="text-slate-700 whitespace-pre-wrap font-sans text-xs leading-relaxed">
+${summaryList}
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-xs space-y-3 text-xs">
+            <h4 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-list-check text-emerald-600"></i>
+              <span>今日すぐ試せる3分アクションプラン</span>
+            </h4>
+            <ol class="space-y-2.5 text-slate-700 list-decimal list-inside leading-relaxed">
+              <li><strong>朝のメール確認時:</strong> ${items[0].title} を意識し、プロンプトに「不明点は逆質問して」または具体例を1つ添えて依頼してみる。</li>
+              <li><strong>資料・データ作成時:</strong> ${items[1].title} を活用し、長文やファイル丸ごとの読み込み、または専用Gemsの枠組みを試す。</li>
+              <li><strong>夕方のまとめ・共有時:</strong> ${items[2].title} を使って、DocsやGmail・スプレッドシートの右サイドパネルで議事録や数式を一瞬で整える。</li>
+            </ol>
+          </div>
+
+          <div id="workPlanLiveContainer" class="pt-2 border-t border-slate-200">
+            <div id="workPlanLiveLoading" class="flex items-center gap-2 text-xs text-slate-500 py-1">
+              <i class="fa-solid fa-circle-notch fa-spin text-googleBlue"></i>
+              <span>Geminiがさらに詳細なパーソナライズプランを算出中...</span>
+            </div>
+            <div id="workPlanLiveResult" class="hidden space-y-2 mt-2"></div>
+          </div>
+        </div>
+      `;
+      document.getElementById("aiModal").classList.remove("hidden");
+
+      const prompt = `今日の3つの学びは以下の通りです：\n${summaryList}\n\nこの3つを連動させて、1日の通常業務（メール処理、資料作成、意思決定など）の中で実践できる「今日すぐやる3分アクションプラン」を提案してください。`;
+      
+      try {
+        const response = await callGemini(prompt);
+        const loading = document.getElementById("workPlanLiveLoading");
+        const result = document.getElementById("workPlanLiveResult");
+        if (response && result) {
+          if (loading) loading.classList.add("hidden");
+          result.classList.remove("hidden");
+          result.innerHTML = `
+            <div class="bg-indigo-50/70 border border-indigo-200 rounded-xl p-3.5 space-y-1.5">
+              <div class="flex items-center gap-1 text-xs font-bold text-indigo-900">
+                <i class="fa-solid fa-wand-magic-sparkles text-indigo-600"></i>
+                <span>Gemini 詳細アドバイス</span>
+              </div>
+              <div class="text-xs text-slate-700 leading-relaxed">
+                ${formatMarkdown(response)}
+              </div>
+            </div>
+          `;
+        } else if (loading) {
+          loading.innerHTML = `<span class="text-[11px] text-slate-400">※上記の標準アクションプランをご活用ください</span>`;
+        }
+      } catch (e) {
+        const loading = document.getElementById("workPlanLiveLoading");
+        if (loading) loading.classList.add("hidden");
+      }
+    }
+
+    async function triggerImmediateAiGeneration() {
+      const dateKey = getCalculatedDateString(currentDayOffset);
+      showToast("Geminiが今日の完全新作3ナレッジを生成中...", "info");
+
+      const prompt = `あなたは「AI全般」「Gemini特化」「Google Workspace活用」のプロです。本日のビジネスパーソンに向けて、実用的ですぐに使えるナレッジを3件（AI全般・Gemini特化・Workspace活用から各1件）作成してください。必ず以下の厳密なJSON形式のみで出力してください。Markdownコードブロックは不要です。
+
+[
+  {
+    "id": "gen-ai-${Date.now()}",
+    "category": "ai",
+    "categoryName": "AI全般・思考法",
+    "title": "タイトル",
+    "subtitle": "一言サブタイトル",
+    "content": "解説（120〜160文字）",
+    "practicalExample": "実践プロンプト",
+    "badge": "プロンプト術",
+    "icon": "fa-solid fa-lightbulb"
+  },
+  {
+    "id": "gen-gemini-${Date.now()}",
+    "category": "gemini",
+    "categoryName": "Gemini特化テクニック",
+    "title": "タイトル",
+    "subtitle": "一言サブタイトル",
+    "content": "Gemini固有の強み解説",
+    "practicalExample": "実践プロンプト",
+    "badge": "Gemini小技",
+    "icon": "fa-solid fa-gem"
+  },
+  {
+    "id": "gen-ws-${Date.now()}",
+    "category": "workspace",
+    "categoryName": "Google Workspace 実践",
+    "title": "タイトル",
+    "subtitle": "一言サブタイトル",
+    "content": "Gmail, Docs, スプレッドシート等のテクニック",
+    "practicalExample": "実践プロンプト",
+    "badge": "実務時短",
+    "icon": "fa-solid fa-briefcase"
+  }
+]`;
 
       try {
-        const apiKey = "";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+        const raw = await callGemini(prompt, "必ず指定された有効なJSON配列のみを出力してください。");
+        if (!raw) throw new Error("No response");
+        const cleaned = raw.replace(/```json/gi, '').replace(/```/g, '').trim();
+        const parsed = JSON.parse(cleaned);
 
-        const payload = {
-          contents: [{ parts: [{ text: prompt }] }],
-          systemInstruction: {
-            parts: [{ text: "親切で実践的なビジネスAIトレーナーとして、Markdownを活用して見やすく回答してください。" }]
-          }
-        };
-
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-        const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-        if (text) {
-          // 簡易Markdown変換
-          const formatted = text
-            .replace(/### (.*?)\n/g, '<h4 class="font-bold text-slate-800 text-base mt-4 mb-1">$1</h4>')
-            .replace(/## (.*?)\n/g, '<h3 class="font-bold text-purple-900 text-lg mt-4 mb-2 pb-1 border-b border-purple-100">$1</h3>')
-            .replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900 font-bold">$1</strong>')
-            .replace(/^- (.*?)\n/gm, '<li class="text-sm text-slate-700 ml-4 list-disc">$1</li>')
-            .replace(/\n\n/g, '<p class="my-2 text-sm text-slate-700 leading-relaxed"></p>');
-
-          contentEl.innerHTML = `
-            <div class="bg-purple-50/50 p-4 rounded-2xl border border-purple-100 mb-4">
-              <span class="text-xs font-bold text-purple-700 uppercase tracking-wide">AI Practitioner Guide</span>
-              <p class="text-xs text-slate-600 mt-1">実務での活用精度を最高まで引き上げるためのアドバイスです。</p>
-            </div>
-            <div class="prose prose-sm max-w-none text-slate-700 space-y-2">
-              ${formatted}
-            </div>
-          `;
+        if (Array.isArray(parsed) && parsed.length === 3) {
+          if (!userState.customGeneratedCards) userState.customGeneratedCards = {};
+          userState.customGeneratedCards[dateKey] = parsed;
+          saveState();
+          renderDailyView();
+          showToast("Geminiによる本日の新作3選を作成しました！✨", "success");
         } else {
-          contentEl.innerHTML = `
-            <div class="p-4 bg-amber-50 rounded-xl text-amber-800 text-sm">
-              解説テキストの生成に失敗しました。時間をおいて再試行してください。
-            </div>
-          `;
+          showToast("データの解析に失敗しました。再試行してください。", "info");
         }
       } catch (err) {
         console.error(err);
-        contentEl.innerHTML = `
-          <div class="p-4 bg-red-50 rounded-xl text-red-800 text-sm">
-            AIとの通信中にエラーが発生しました。ネットワーク環境をご確認ください。
-          </div>
-        `;
+        showToast("AI生成に失敗しました。時間をおいて再試行してください。", "info");
       }
     }
 
-    // 今日の3つをGeminiで完全に新しいトピックとして3件生成する機能
-    async function regenerateDailyThreeWithAI() {
-      const btn = document.getElementById("btnGeminiGenerate");
-      const originalHTML = btn.innerHTML;
-      btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i><span>生成中...</span>`;
-      btn.disabled = true;
+    function openDeepQuizModal() {
+      const items = getDailyItems(currentDayOffset);
+      const quizContainer = document.getElementById("quizContainer");
+      quizContainer.innerHTML = "";
 
-      try {
-        const apiKey = "";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-        const systemInstruction = "あなたは企業のDX・AI活用推進リーダーです。毎日社員向けに配信する『AI全般』『Gemini活用』『Google Workspace効率化』の3つの実践的で役立つ知識を生成してください。";
+      items.forEach((item, index) => {
+        const questionBlock = document.createElement("div");
+        questionBlock.className = "bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2.5";
         
-        const payload = {
-          contents: [{ parts: [{ text: "明日使える実践知識を以下の3カテゴリから1つずつ、合計3つJSON形式で作成してください: 1. AI全般 2. Gemini 3. Google Workspace" }] }],
-          generationConfig: {
-            responseMimeType: "application/json",
-            responseSchema: {
-              type: "ARRAY",
-              items: {
-                type: "OBJECT",
-                properties: {
-                  id: { type: "STRING" },
-                  category: { type: "STRING" },
-                  title: { type: "STRING" },
-                  summary: { type: "STRING" },
-                  practicalPrompt: { type: "STRING" },
-                  actionItem: { type: "STRING" }
-                },
-                required: ["id", "category", "title", "summary", "practicalPrompt", "actionItem"]
-              }
-            }
-          },
-          systemInstruction: { parts: [{ text: systemInstruction }] }
-        };
+        let questionText = "";
+        let options = [];
+        let correctIdx = 0;
+        let explanation = "";
 
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-        const jsonText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (jsonText) {
-          const newItems = JSON.parse(jsonText);
-          newItems.forEach((item, idx) => {
-            item.categoryColor = item.category === "Gemini" 
-              ? "bg-purple-100 text-purple-800 border-purple-200" 
-              : item.category === "Google Workspace" 
-                ? "bg-emerald-100 text-emerald-800 border-emerald-200" 
-                : "bg-blue-100 text-blue-800 border-blue-200";
-            item.tags = ["最新AI", "Gemini生成"];
-            item.id = `ai_gen_${Date.now()}_${idx}`;
-          });
-
-          APP_STATE.todayItems = newItems;
-          APP_STATE.completedIds.clear();
-          renderApp();
-          showToast("✨ Geminiが今日の新しい3つの知識を生成しました！");
-        }
-      } catch (err) {
-        console.error("AI Generation Error:", err);
-        showToast("生成に失敗しました。元のデータセットを表示します。");
-      } finally {
-        btn.innerHTML = originalHTML;
-        btn.disabled = false;
-        lucide.createIcons();
-      }
-    }
-
-    function checkDeliveryNotification() {
-      // 配信時間の監視（タブを開いているとき）
-      const now = new Date();
-      const currentHoursMinutes = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-      if (currentHoursMinutes === APP_STATE.deliveryTime && now.getSeconds() < 10) {
-        if ("Notification" in window && Notification.permission === "granted") {
-          new Notification("🔔 AI & Workspace 毎日の3つの知識", {
-            body: "本日のAI・Gemini・Google Workspaceの3つの知識が届いています！チェックして業務をスピードアップしましょう。",
-            icon: "https://placehold.co/128x128/2563eb/ffffff?text=AI3"
-          });
-        }
-      }
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      loadState();
-      renderApp();
-
-      // 定期タイマー（毎分通知チェック）
-      setInterval(checkDeliveryNotification, 30000);
-
-      // 文字サイズ変更 A- / A+ ボタン
-      document.getElementById("btnFontDec").addEventListener("click", () => {
-        const curIndex = FONT_SIZE_SEQUENCE.indexOf(APP_STATE.fontSize);
-        if (curIndex > 0) {
-          applyFontSize(FONT_SIZE_SEQUENCE[curIndex - 1]);
-          showToast(`文字サイズ: ${FONT_SIZE_LABELS[FONT_SIZE_SEQUENCE[curIndex - 1]]}`);
-        }
-      });
-
-      document.getElementById("btnFontInc").addEventListener("click", () => {
-        const curIndex = FONT_SIZE_SEQUENCE.indexOf(APP_STATE.fontSize);
-        if (curIndex < FONT_SIZE_SEQUENCE.length - 1) {
-          applyFontSize(FONT_SIZE_SEQUENCE[curIndex + 1]);
-          showToast(`文字サイズ: ${FONT_SIZE_LABELS[FONT_SIZE_SEQUENCE[curIndex + 1]]}`);
-        }
-      });
-
-      // 設定モーダル制御
-      const settingsModal = document.getElementById("settingsModal");
-      const btnOpenSettings = document.getElementById("btnOpenSettings");
-      const btnCloseSettings = document.getElementById("btnCloseSettings");
-      const btnSaveSettings = document.getElementById("btnSaveSettings");
-      const inputDeliveryTime = document.getElementById("inputDeliveryTime");
-
-      btnOpenSettings.addEventListener("click", () => {
-        inputDeliveryTime.value = APP_STATE.deliveryTime;
-        applyFontSize(APP_STATE.fontSize);
-        settingsModal.classList.remove("hidden");
-        settingsModal.classList.add("flex");
-      });
-
-      const closeSettings = () => {
-        settingsModal.classList.add("hidden");
-        settingsModal.classList.remove("flex");
-      };
-
-      btnCloseSettings.addEventListener("click", closeSettings);
-
-      btnSaveSettings.addEventListener("click", () => {
-        if (inputDeliveryTime.value) {
-          APP_STATE.deliveryTime = inputDeliveryTime.value;
-        }
-        saveState();
-        renderApp();
-        closeSettings();
-        showToast("⚙️ 配信時間と文字サイズの設定を保存しました！");
-      });
-
-      // 文字サイズボタングリッドのクリック
-      document.querySelectorAll(".font-size-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const selectedSize = btn.getAttribute("data-size");
-          applyFontSize(selectedSize);
-        });
-      });
-
-      // 通知テストボタン
-      document.getElementById("btnTestNotification").addEventListener("click", () => {
-        if ("Notification" in window) {
-          if (Notification.permission === "granted") {
-            new Notification("🔔 配信リマインダーのテスト", {
-              body: `毎日 ${APP_STATE.deliveryTime} に新しいAI & WorkspaceのTipsをお届けします！`,
-            });
-            showToast("テスト通知を送信しました！");
-          } else if (Notification.permission !== "denied") {
-            Notification.requestPermission().then(permission => {
-              if (permission === "granted") {
-                new Notification("🔔 配信リマインダーのテスト", {
-                  body: `通知が有効化されました！毎日の学習をサポートします。`,
-                });
-                showToast("通知を許可しました！");
-              } else {
-                showToast("通知が許可されませんでした。ブラウザの設定をご確認ください。");
-              }
-            });
-          } else {
-            showToast("ブラウザの通知が無効になっています。");
-          }
+        if (item.category === 'ai') {
+          questionText = `Q1 (${item.categoryName}): AIのハルシネーション（幻覚）を防ぐ指示として最も適切なものは？`;
+          options = [
+            "「情報が足りない場合は推測せず私に逆質問してください」と指示する",
+            "「なるべく短く1行で結論だけ言って」と急かす",
+            "プロンプトをすべて英語にして感情的な言葉を避ける",
+            "出力文字数を指定せずAIの自由に任せる"
+          ];
+          correctIdx = 0;
+          explanation = "不確実な点がある場合に勝手に埋めず逆質問させるプロンプトは、ハルシネーション抑制の基本かつ極めて有効な手法です。";
+        } else if (item.category === 'gemini') {
+          questionText = `Q2 (${item.categoryName}): Geminiの機能に関する記述として正しいものはどれですか？`;
+          options = [
+            "Geminiは画像や音声の入力を受け付けることができない",
+            "Gemsを使えば、役割やプロンプトを事前定義した専用アシスタントを自作できる",
+            "Geminiの入力コンテキストウィンドウは最大でも100文字程度である",
+            "Google検索と連携して回答のファクトチェックを行う機能はない"
+          ];
+          correctIdx = 1;
+          explanation = "Geminiの「Gems」機能により、定型業務（社内報、メール添削、分析）に合わせたカスタムアシスタントを簡単に作成可能です。";
         } else {
-          showToast("お使いの環境はデスクトップ通知をサポートしていません。");
+          questionText = `Q3 (${item.categoryName}): Google WorkspaceとGeminiの連携メリットとして適切なものは？`;
+          options = [
+            "メールの送信ボタンが自動的に消滅する",
+            "GmailやDocsのサイドパネルから直接文脈を読み取って下書きや要約を提案してくれる",
+            "Googleドライブ内のすべてのファイルが自動的に外部に公開される",
+            "スプレッドシートの関数がすべて手動専用になる"
+          ];
+          correctIdx = 1;
+          explanation = "WorkspaceのGeminiは、各アプリのサイドパネルで作業中のメールスレッドやドキュメントの文脈を直接把握しながら支援してくれます。";
+        }
+
+        questionBlock.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-googleBlue uppercase">問題 ${index + 1} / 3</span>
+            <span class="text-[10px] font-semibold text-slate-400">${item.badge}</span>
+          </div>
+          <h4 class="font-bold text-slate-900 text-xs sm:text-sm leading-snug">${questionText}</h4>
+          <div class="space-y-1.5 pt-1" id="quizOptions_${index}">
+            ${options.map((opt, oIdx) => `
+              <button onclick="checkAnswer(${index}, ${oIdx}, ${correctIdx}, '${escapeJsString(explanation)}')" class="quiz-btn w-full text-left p-2.5 rounded-lg border border-slate-200 bg-white hover:bg-blue-50/50 hover:border-blue-200 text-xs text-slate-700 transition flex items-center justify-between">
+                <span>${opt}</span>
+                <i class="fa-regular fa-circle text-slate-300 text-xs"></i>
+              </button>
+            `).join('')}
+          </div>
+          <div id="quizResult_${index}" class="hidden p-2.5 rounded-lg text-xs leading-relaxed"></div>
+        `;
+        quizContainer.appendChild(questionBlock);
+      });
+
+      document.getElementById("quizModal").classList.remove("hidden");
+    }
+
+    function checkAnswer(qIdx, selectedIdx, correctIdx, explanation) {
+      const container = document.getElementById(`quizOptions_${qIdx}`);
+      const buttons = container.querySelectorAll(".quiz-btn");
+      const resultBox = document.getElementById(`quizResult_${qIdx}`);
+
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === correctIdx) {
+          btn.className = "w-full text-left p-2.5 rounded-lg border border-emerald-300 bg-emerald-50 text-xs font-semibold text-emerald-800 flex items-center justify-between";
+          btn.innerHTML += `<i class="fa-solid fa-check text-emerald-600"></i>`;
+        } else if (idx === selectedIdx) {
+          btn.className = "w-full text-left p-2.5 rounded-lg border border-rose-300 bg-rose-50 text-xs font-semibold text-rose-800 flex items-center justify-between";
+          btn.innerHTML += `<i class="fa-solid fa-xmark text-rose-600"></i>`;
+        } else {
+          btn.className = "w-full text-left p-2.5 rounded-lg border border-slate-200 bg-slate-50 text-xs text-slate-400 opacity-60 flex items-center justify-between";
         }
       });
 
-      // タブ切り替え
-      const tabToday = document.getElementById("tabToday");
-      const tabArchive = document.getElementById("tabArchive");
+      resultBox.classList.remove("hidden");
+      if (selectedIdx === correctIdx) {
+        resultBox.className = "p-2.5 rounded-lg text-xs leading-relaxed bg-emerald-100/60 border border-emerald-200 text-emerald-900";
+        resultBox.innerHTML = `<strong>正解！🎉</strong> ${explanation}`;
+      } else {
+        resultBox.className = "p-2.5 rounded-lg text-xs leading-relaxed bg-rose-100/60 border border-rose-200 text-rose-900";
+        resultBox.innerHTML = `<strong>惜しい！</strong> 正解は選択肢 ${correctIdx + 1} です。<br>${explanation}`;
+      }
+    }
 
-      tabToday.addEventListener("click", () => {
-        APP_STATE.activeTab = "today";
-        tabToday.className = "px-4 py-2 rounded-xl text-sm font-semibold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 transition";
-        tabArchive.className = "px-4 py-2 rounded-xl text-sm font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-sm flex items-center gap-1.5 transition";
-        renderApp();
+    function copyToClipboard(text) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast("クリップボードにコピーしました！📋", "copied");
+      } catch (err) {
+        showToast("コピーに失敗しました", "info");
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function speakText(encodedText) {
+      const text = decodeURIComponent(encodedText);
+      if (!('speechSynthesis' in window)) {
+        showToast("音声読み上げに未対応のブラウザです", "info");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ja-JP';
+      utterance.rate = 1.05;
+      window.speechSynthesis.speak(utterance);
+      showToast("音声を再生しています🔊", "info");
+    }
+
+    function showToast(message, type = "info") {
+      const container = document.getElementById("toastContainer");
+      if (!container) return;
+      const toast = document.createElement("div");
+      toast.className = "pointer-events-auto flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold shadow-md text-white transition-all transform duration-300 opacity-0 translate-y-2";
+      if (type === "success") {
+        toast.className += " bg-emerald-600";
+      } else if (type === "copied") {
+        toast.className += " bg-indigo-600";
+      } else {
+        toast.className += " bg-slate-800";
+      }
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+      
+      requestAnimationFrame(() => {
+        toast.classList.remove("opacity-0", "translate-y-2");
+        toast.classList.add("opacity-100", "translate-y-0");
       });
 
-      tabArchive.addEventListener("click", () => {
-        APP_STATE.activeTab = "archive";
-        tabArchive.className = "px-4 py-2 rounded-xl text-sm font-semibold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 transition";
-        tabToday.className = "px-4 py-2 rounded-xl text-sm font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-sm flex items-center gap-1.5 transition";
-        renderApp();
-      });
+      setTimeout(() => {
+        toast.classList.add("opacity-0", "translate-y-2");
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
+    }
 
-      // AIで今日の3つを再生成
-      document.getElementById("btnGeminiGenerate").addEventListener("click", regenerateDailyThreeWithAI);
+    function escapeJsString(str) {
+      return (str || "").replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n');
+    }
 
-      // AI詳細モーダルのクローズ
-      const aiModal = document.getElementById("aiDetailModal");
-      const closeAiModal = () => {
-        aiModal.classList.add("hidden");
-        aiModal.classList.remove("flex");
-      };
-      document.getElementById("btnCloseAiModal").addEventListener("click", closeAiModal);
-      document.getElementById("btnCloseAiModalBtn").addEventListener("click", closeAiModal);
-    });
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.add("hidden");
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    window.onload = function() {
+      loadState();
+      renderDailyView();
+      renderArchiveView();
+    };
   </script>
 </body>
 </html>
