@@ -149,6 +149,9 @@
             <span id="currentDateDisplay">本日の日付</span>
             <span class="text-slate-300">•</span>
             <span id="dayTopicSeed" class="text-slate-700 font-bold">本日の厳選3トピック</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 font-semibold flex items-center gap-1">
+              <i class="fa-solid fa-ban text-[9px]"></i> 重複なし・使い切り
+            </span>
           </div>
           <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight mt-0.5">
             今日身につける3つのAIナレッジ
@@ -370,7 +373,7 @@
   </div>
 
   <script>
-    /* Knowledge Database */
+    /* Knowledge Database (豊富な初期ストック) */
     const KNOWLEDGE_BASE = [
       // CATEGORY 1: AI (ai)
       {
@@ -384,7 +387,7 @@
         badge: "プロンプト原則",
         icon: "fa-solid fa-shield-halved",
         deepDive: {
-          scenario: "【Before】契約書の確認を丸投げすると、AIが存在しない条項や一般的すぎる見解を事実のように回答。\n【After】「不明点は逆質問せよ」と指定することで、「契約期間と管轄裁判所の記載が抜けています。これらを教えていただけますか？」とAI側から確認が入り、誤判断リスクが劇的に激減。",
+          scenario: "【Before】契約書の確認を丸投げすると、AIが存在しない条項や一般的すぎる見解を事実のように回答。\n【After】「不明点は逆質問せよ」と指定することで、「契約期間と管轄裁判所の記載が抜けています。これらを教えていただけますか？」とAI側から確認が入り、誤判断リスクが激減。",
           prompt1: "【契約・規定確認】\n「以下の条項の法的一貫性を点検してください。前提となる社内ルールが不明な箇所は推測せず、箇条書きで逆質問してください。」",
           prompt2: "【要件定義・企画】\n「この企画書の抜け漏れを診断してください。判断材料が不足するパラメータがあれば、独断で埋めず質問してください。」",
           tip: "プロンプトの最後に「※憶測で断定しないこと」と念押しを1文添えるだけでも精度が安定します。"
@@ -456,6 +459,40 @@
           prompt1: "【情報収集エージェント】\n「〇〇業界の直近1週間の法改正ニュースをWeb検索し、影響度別に3段階でランク付けして要約してください。」",
           prompt2: "【Workspace連動】\n「来週のGoogleカレンダーの空き時間を抽出し、候補日程3パターンを含む打診メール下書きを作成してください。」",
           tip: "ツールが実行しやすいよう、「目的（Goal）」「使える情報（Context）」「成果物（Output）」を明確に渡しましょう。"
+        }
+      },
+      {
+        id: "ai-6",
+        category: "ai",
+        categoryName: "AI全般・思考法",
+        title: "ペルソナ（役割指定）による回答視点の制御",
+        subtitle: "「あなたは熟練の〇〇です」で視点を鋭くする",
+        content: "漠然と回答を求めるのではなく、「あなたは20年の実績を持つ人事労務の専門弁護士です」「あなたは辛口なUI/UXデザイナーです」と専門家としての立場を定義することで、回答の語彙、深度、着眼点が劇的にシャープになります。",
+        practicalExample: "あなたはBtoB向けSaaSの最高マーケティング責任者（CMO）です。以下の新機能告知メールのドラフトを、企業の購買意思決定者（情シス部門長）の心に刺さる言葉遣いでブラッシュアップしてください。",
+        badge: "ペルソナ指定",
+        icon: "fa-solid fa-user-tie",
+        deepDive: {
+          scenario: "【Before】新サービスのLP文面を作らせたら、誰にでも言えるありきたりな美辞麗句ばかりが並ぶ。\n【After】「シード期スタートアップの投資家目線で辛口に評価せよ」と指定し、市場規模と競合優位性の弱点を鋭く指摘させた。",
+          prompt1: "【役職指定】\n「あなたは厳しい品質管理責任者です。以下の業務マニュアルから、新人がミスを起こしやすい曖昧な表現を指摘してください。」",
+          prompt2: "【読者視点】\n「あなたはITが苦手なシニア層です。この操作説明を読んでどこでつまずくかを箇条書きで教えてください。」",
+          tip: "「辛口で」「楽観的に」「論理的厳密さを最優先に」など思考のトーンもセットで与えると効果的です。"
+        }
+      },
+      {
+        id: "ai-7",
+        category: "ai",
+        categoryName: "AI全般・思考法",
+        title: "ネガティブプロンプト（除外指定）の活用",
+        subtitle: "「〜は絶対に含めないで」で無駄な定型句を一掃",
+        content: "AIは放っておくと「承知いたしました！お役に立てて光栄です」や、前置き・結びの社交辞令を長く書きがちです。「前置き・挨拶・まとめの定型文は一切出力せず、本文のみを箇条書きで出力してください」と除外条件を指示することで、即業務に使える文章が得られます。",
+        practicalExample: "以下の文章の誤字脱字を校正してください。【除外ルール】挨拶文や「以下のように修正しました」という前置き、変更理由の解説は一切不要です。修正後の完成テキストのみを出力してください。",
+        badge: "ノイズ削減",
+        icon: "fa-solid fa-filter",
+        deepDive: {
+          scenario: "【Before】要約文をコピペしてチャットツールに貼る際、毎回AIの「はい！要約しました」という前置きを手動で消していた。\n【After】除外指定を入れておくことで、そのままコピー＆ペーストできる純粋な成果物だけを取得可能に。",
+          prompt1: "【挨拶排除】\n「挨拶・結び・前置き・解説は一切省き、指定のフォーマットの表のみを出力してください。」",
+          prompt2: "【専門用語禁止】\n「カタカナ専門用語（コミット、アグリー、コンセンサス等）は一切使わず、平易な日本語のみで説明してください。」",
+          tip: "除外したい要素を「【禁止事項】」という見出しで明記すると遵守率が跳ね上がります。"
         }
       },
 
@@ -545,6 +582,23 @@
           tip: "最初に調査計画（どの観点から調べるか）を提示してくれるため、方向性に齟齬がないか確認してから進められます。"
         }
       },
+      {
+        id: "gemini-6",
+        category: "gemini",
+        categoryName: "Gemini特化テクニック",
+        title: "Canvas機能：コードや文章のインラインリアルタイム編集",
+        subtitle: "チャットを流さずにドキュメントだけを右側で育てる",
+        content: "GeminiのCanvas（キャンバス）画面を使うと、左側のチャットで相談しながら右側のエディタで文章やコードを直接推敲できます。「第2段落だけもっと説得力を強めて」「コードの関数Aにエラーハンドリングを追加して」など部分修正が極めて快適です。",
+        practicalExample: "「（Canvasを開いて）社内向けセキュリティポリシーのドラフトを右側のエディタで作成してください。まずは目次と第1章の草案からスタートしましょう。」",
+        badge: "対話型執筆",
+        icon: "fa-solid fa-table-columns",
+        deepDive: {
+          scenario: "【Before】チャットで長文を生成させるたびに全文が出力され、スクロールして該当箇所を探すのがストレス。\n【After】右画面の文章の特定段落を選択して「ここを短く」と指示するだけで、その部分だけがピンポイントで書き換わる。",
+          prompt1: "【部分推敲指示】\n「右側のドキュメントの第3節を選択しました。この部分のトーンを社外取引先向けの敬語表現に修正してください。」",
+          prompt2: "【段階的コード開発】\n「右側のHTMLコードに対して、ダークモード切り替え用のTailwindクラスとボタンを追加してください。」",
+          tip: "「長さ調整スライダー」や「読者レベル変更」ボタンなどの組み込みツールも併用すると爆速です。"
+        }
+      },
 
       // CATEGORY 3: WORKSPACE (workspace)
       {
@@ -631,6 +685,23 @@
           prompt2: "【暗黙知の抽出】\n「過去3年間の新卒採用アンケートファイルから、志望動機として最も多く挙がったキーワードを要約して。」",
           tip: "ファイル名がうろ覚えでも、文書の中身（本文）を検索対象にしてくれるのが最大のメリットです。"
         }
+      },
+      {
+        id: "ws-6",
+        category: "workspace",
+        categoryName: "Google Workspace 実践",
+        title: "Google Meet × Gemini：リアルタイム文字起こしと自動議事録",
+        subtitle: "「Take notes for me」で会議中のメモ取りから解放",
+        content: "Google MeetのGemini連携機能「Take notes for me（メモ作成）」を有効にすると、会議中の発言をリアルタイムで要約し、会議終了後に決定事項とToDoが整理されたGoogleドキュメントが主催者へ自動送信されます。",
+        practicalExample: "【Meet終了後のドキュメント確認】\n「会議中に共有された宿題事項（Action Items）の担当者と期限を抽出し、Googleカレンダーのタスク（Tasks）に登録する準備をしてください。」",
+        badge: "会議生産性",
+        icon: "fa-solid fa-video",
+        deepDive: {
+          scenario: "【Before】会議中にメモを取るのに必死で議論に集中できず、終了後も議事録の整形に1時間かかっていた。\n【After】Geminiが自動で議事録を作成してくれるため、100%発言・議論に集中。会議直後に全員へ確定メモが届く。",
+          prompt1: "【議論のキャッチアップ】\n「（遅れて会議に参加した際サイドパネルで）『ここまでの15分間で合意されたポイントを箇条書きで教えて』」",
+          prompt2: "【ネクストアクション整理】\n「Meetの文字起こしテキストから、次週までに準備すべきタスクを部署別に整理して。」",
+          tip: "途中参加時にも「これまでのまとめ」をサイドパネルですぐ確認できるため、話の流れを止めずに合流できます。"
+        }
       }
     ];
 
@@ -643,12 +714,14 @@
       scheduledTime: "08:00",
       enableNotification: false,
       fontSize: "standard",
-      customGeneratedCards: {}
+      usedItemIds: [],          // 一度でも使われたアイテムID（二度と再登場させない）
+      dailyHistory: {},         // 日付ごとの割り当て固定マップ { "2026-10-12": [item1, item2, item3] }
+      customPool: []            // AI生成などで追加されたナレッジプール
     };
 
     function loadState() {
       try {
-        const saved = localStorage.getItem("daily_ai_hub_state_v3");
+        const saved = localStorage.getItem("daily_ai_hub_state_v4");
         if (saved) {
           const parsed = JSON.parse(saved);
           userState = Object.assign(userState, parsed);
@@ -658,6 +731,10 @@
       }
       if (!userState.scheduledTime) userState.scheduledTime = "08:00";
       if (!userState.fontSize) userState.fontSize = "standard";
+      if (!Array.isArray(userState.usedItemIds)) userState.usedItemIds = [];
+      if (!userState.dailyHistory) userState.dailyHistory = {};
+      if (!Array.isArray(userState.customPool)) userState.customPool = [];
+
       applyFontSize(userState.fontSize);
       updateScheduleUI();
       startScheduleTimer();
@@ -665,7 +742,7 @@
 
     function saveState() {
       try {
-        localStorage.setItem("daily_ai_hub_state_v3", JSON.stringify(userState));
+        localStorage.setItem("daily_ai_hub_state_v4", JSON.stringify(userState));
       } catch (e) {
         console.warn("Storage save error:", e);
       }
@@ -710,27 +787,93 @@
       return `${y}-${m}-${day}`;
     }
 
+    // 全アイテムプールを取得（静的データ + ユーザー生成プール）
+    function getAllPoolItems() {
+      return [...KNOWLEDGE_BASE, ...(userState.customPool || [])];
+    }
+
+    // 一度使った内容は二度と使わない（完全重複除外）選出ロジック
     function getDailyItems(offset) {
       const dateKey = getCalculatedDateString(offset);
-      if (userState.customGeneratedCards && userState.customGeneratedCards[dateKey]) {
-        return userState.customGeneratedCards[dateKey];
+
+      // 1. その日付ですでに割り当て済みの履歴があれば、それを固定表示（過去日の閲覧でもブレない）
+      if (userState.dailyHistory && userState.dailyHistory[dateKey] && userState.dailyHistory[dateKey].length === 3) {
+        return userState.dailyHistory[dateKey];
       }
 
-      const targetDate = getCalculatedDate(offset);
-      const y = targetDate.getFullYear();
-      const m = targetDate.getMonth() + 1;
-      const d = targetDate.getDate();
-      const seed = Math.abs(y * 365 + m * 31 + d);
+      // 2. まだ割り当てられていない日の場合：一度も使われていない（!usedItemIds.includes）アイテムから各カテゴリ1件ずつ選出
+      const allItems = getAllPoolItems();
+      const usedSet = new Set(userState.usedItemIds || []);
 
-      const aiList = KNOWLEDGE_BASE.filter(k => k.category === 'ai');
-      const geminiList = KNOWLEDGE_BASE.filter(k => k.category === 'gemini');
-      const wsList = KNOWLEDGE_BASE.filter(k => k.category === 'workspace');
+      const unusedAi = allItems.filter(k => k.category === 'ai' && !usedSet.has(k.id));
+      const unusedGemini = allItems.filter(k => k.category === 'gemini' && !usedSet.has(k.id));
+      const unusedWs = allItems.filter(k => k.category === 'workspace' && !usedSet.has(k.id));
 
-      const selectedAi = aiList[seed % aiList.length];
-      const selectedGemini = geminiList[(seed + 1) % geminiList.length];
-      const selectedWs = wsList[(seed + 2) % wsList.length];
+      let chosenAi = unusedAi.length > 0 ? unusedAi[0] : null;
+      let chosenGemini = unusedGemini.length > 0 ? unusedGemini[0] : null;
+      let chosenWs = unusedWs.length > 0 ? unusedWs[0] : null;
 
-      return [selectedAi, selectedGemini, selectedWs];
+      // ストックが足りないカテゴリがある場合は動的フォールバック新規作成
+      if (!chosenAi) chosenAi = createFallbackItem('ai', Date.now());
+      if (!chosenGemini) chosenGemini = createFallbackItem('gemini', Date.now() + 1);
+      if (!chosenWs) chosenWs = createFallbackItem('workspace', Date.now() + 2);
+
+      const chosenGroup = [chosenAi, chosenGemini, chosenWs];
+
+      // 使用済みIDリストに追加（一度使ったものは二度と出ない）
+      chosenGroup.forEach(item => {
+        if (!userState.usedItemIds.includes(item.id)) {
+          userState.usedItemIds.push(item.id);
+        }
+      });
+
+      // その日の割り当て履歴に恒久保存
+      userState.dailyHistory[dateKey] = chosenGroup;
+      saveState();
+
+      return chosenGroup;
+    }
+
+    // ストックが尽きた場合のフォールバック即時生成
+    function createFallbackItem(category, timestamp) {
+      const id = `auto-${category}-${timestamp}`;
+      if (category === 'ai') {
+        return {
+          id,
+          category: 'ai',
+          categoryName: 'AI全般・思考法',
+          title: `プロンプトの出力フォーマット厳格化 (${new Date().toLocaleDateString('ja-JP')})`,
+          subtitle: "Markdownや表形式を崩さずに出力させる指示法",
+          content: "生成AIに表やMarkdown、JSONを出力させる際は、『余計な解説文は一切出力せず、コードブロックまたは表のみを出力すること』と否定文を添えることでパースエラーを防止できます。",
+          practicalExample: "以下のデータを元に「項目」「金額」「担当者」の3列のMarkdown表を作成してください。※前置きや挨拶文、説明は出力せず、表のみを出力してください。",
+          badge: "自動生成ナレッジ",
+          icon: "fa-solid fa-code"
+        };
+      } else if (category === 'gemini') {
+        return {
+          id,
+          category: 'gemini',
+          categoryName: 'Gemini特化テクニック',
+          title: `Geminiにおける音声プロンプトと長文議事録 (${new Date().toLocaleDateString('ja-JP')})`,
+          subtitle: "音声ファイルをそのままアップロードしてToDo抽出",
+          content: "Geminiは長大な音声ファイルの直接解析に対応しています。1時間の会議録音をそのままアップロードし、『決定事項と宿題（期日/担当）を箇条書きで抽出して』と指示するだけで文字起こしと要約が同時に完了します。",
+          practicalExample: "（会議音声ファイルを添付）「この会議の中で議論された課題と、最終的に合意された解決策を箇条書きで整理してください。」",
+          badge: "自動生成ナレッジ",
+          icon: "fa-solid fa-microphone-lines"
+        };
+      } else {
+        return {
+          id,
+          category: 'workspace',
+          categoryName: 'Google Workspace 実践',
+          title: `Google Keep × Docs × Gemini の瞬時ドキュメント化 (${new Date().toLocaleDateString('ja-JP')})`,
+          subtitle: "メモ帳の殴り書きを右サイドパネルから企画書へ昇華",
+          content: "Google Keepにメモした日々のアイデアは、Googleドキュメントの右サイドパネルから直接取り込めます。さらにDocs内のGeminiに『このKeepメモの箇条書きを元に、正式な稟議書の文面を作成して』と依頼すれば一瞬で清書が完了します。",
+          practicalExample: "「右パネルのKeepメモ（新プロジェクト要件）を参照し、社内提案書の導入パラグラフを作成してください。」",
+          badge: "自動生成ナレッジ",
+          icon: "fa-solid fa-note-sticky"
+        };
+      }
     }
 
     function renderDailyView() {
@@ -997,8 +1140,8 @@ ${item.practicalExample}
     let currentNoteTargetId = null;
     function openNoteModal(cardId) {
       currentNoteTargetId = cardId;
-      const item = KNOWLEDGE_BASE.find(k => k.id === cardId) ||
-                   (userState.customGeneratedCards[getCalculatedDateString(currentDayOffset)] || []).find(k => k.id === cardId);
+      const allItems = getAllPoolItems();
+      const item = allItems.find(k => k.id === cardId);
       document.getElementById("noteCardTitle").innerText = item ? item.title : "";
       document.getElementById("noteInput").value = userState.notes[cardId] || "";
       document.getElementById("noteModal").classList.remove("hidden");
@@ -1039,14 +1182,15 @@ ${item.practicalExample}
       const container = document.getElementById("archiveGrid");
       if (!container) return;
 
-      document.getElementById("countAll").innerText = KNOWLEDGE_BASE.length;
-      document.getElementById("countAi").innerText = KNOWLEDGE_BASE.filter(k => k.category === 'ai').length;
-      document.getElementById("countGemini").innerText = KNOWLEDGE_BASE.filter(k => k.category === 'gemini').length;
-      document.getElementById("countWorkspace").innerText = KNOWLEDGE_BASE.filter(k => k.category === 'workspace').length;
+      const allItems = getAllPoolItems();
+      document.getElementById("countAll").innerText = allItems.length;
+      document.getElementById("countAi").innerText = allItems.filter(k => k.category === 'ai').length;
+      document.getElementById("countGemini").innerText = allItems.filter(k => k.category === 'gemini').length;
+      document.getElementById("countWorkspace").innerText = allItems.filter(k => k.category === 'workspace').length;
       document.getElementById("countFav").innerText = userState.favoriteIds.length;
 
       const keyword = (document.getElementById("archiveSearchInput")?.value || "").trim().toLowerCase();
-      let list = KNOWLEDGE_BASE;
+      let list = allItems;
 
       if (currentActiveCategory === 'favorites') {
         list = list.filter(k => userState.favoriteIds.includes(k.id));
@@ -1076,12 +1220,16 @@ ${item.practicalExample}
 
       list.forEach(item => {
         const isFav = userState.favoriteIds.includes(item.id);
+        const isUsed = userState.usedItemIds.includes(item.id);
         const card = document.createElement("div");
         card.className = "bg-white rounded-xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between";
         card.innerHTML = `
           <div>
             <div class="flex items-center justify-between text-xs mb-1.5">
-              <span class="font-bold text-slate-400 text-[11px]">${item.categoryName}</span>
+              <span class="font-bold text-slate-400 text-[11px] flex items-center gap-1">
+                <span>${item.categoryName}</span>
+                ${isUsed ? '<span class="text-[9px] px-1 py-0.2 rounded bg-slate-100 text-slate-500">配信済</span>' : ''}
+              </span>
               <button onclick="toggleFavorite('${item.id}')" class="text-slate-400 hover:text-amber-500">
                 <i class="${isFav ? 'fa-solid text-amber-500' : 'fa-regular'} fa-star"></i>
               </button>
@@ -1231,8 +1379,8 @@ ${dd.scenario}
 
     async function openDeepDiveModal(cardId) {
       activeModalCardId = cardId;
-      const item = KNOWLEDGE_BASE.find(k => k.id === cardId) || 
-                   (userState.customGeneratedCards[getCalculatedDateString(currentDayOffset)] || []).find(k => k.id === cardId);
+      const allItems = getAllPoolItems();
+      const item = allItems.find(k => k.id === cardId);
       if (!item) return;
 
       document.getElementById("aiModalTitle").innerText = `${item.title} の深掘り解説`;
@@ -1370,7 +1518,18 @@ ${summaryList}
       const dateKey = getCalculatedDateString(currentDayOffset);
       showToast("Geminiが今日の完全新作3ナレッジを生成中...", "info");
 
-      const prompt = `あなたは「AI全般」「Gemini特化」「Google Workspace活用」のプロです。本日のビジネスパーソンに向けて、実用的ですぐに使えるナレッジを3件（AI全般・Gemini特化・Workspace活用から各1件）作成してください。必ず以下の厳密なJSON形式のみで出力してください。Markdownコードブロックは不要です。
+      // 過去に使われたトピックを排除するプロンプトを構築
+      const usedTitles = (userState.usedItemIds || []).map(id => {
+        const it = getAllPoolItems().find(x => x.id === id);
+        return it ? it.title : null;
+      }).filter(Boolean).slice(-10).join('、');
+
+      const prompt = `あなたは「AI全般」「Gemini特化」「Google Workspace活用」のプロフェッショナルです。
+本日のビジネスパーソンに向けて、実用的ですぐに使えるナレッジを3件（AI全般・Gemini特化・Workspace活用から各1件）作成してください。
+※重要：以下の過去に扱ったトピックとは絶対に重複しない、新しい切り口・テーマにしてください：
+${usedTitles || '（過去トピックなし）'}
+
+必ず以下の厳密なJSON形式のみで出力してください。Markdownコードブロックは不要です。
 
 [
   {
@@ -1415,11 +1574,20 @@ ${summaryList}
         const parsed = JSON.parse(cleaned);
 
         if (Array.isArray(parsed) && parsed.length === 3) {
-          if (!userState.customGeneratedCards) userState.customGeneratedCards = {};
-          userState.customGeneratedCards[dateKey] = parsed;
+          // 生成されたカードをプールに追加し、使用済みリストと日別履歴に登録
+          if (!userState.customPool) userState.customPool = [];
+          userState.customPool.push(...parsed);
+
+          userState.dailyHistory[dateKey] = parsed;
+          parsed.forEach(p => {
+            if (!userState.usedItemIds.includes(p.id)) {
+              userState.usedItemIds.push(p.id);
+            }
+          });
+
           saveState();
           renderDailyView();
-          showToast("Geminiによる本日の新作3選を作成しました！✨", "success");
+          showToast("Geminiによる本日の完全新作3選を作成しました！✨", "success");
         } else {
           showToast("データの解析に失敗しました。再試行してください。", "info");
         }
